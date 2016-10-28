@@ -16,9 +16,11 @@ public class Reservation {
     private Date dateTo;
 
     @ManyToOne
+    @JoinColumn(name = "room_id")
     private Room room;
 
     @ManyToOne
+    @JoinColumn(name = "guest_id")
     private Guest guest;
 
     public Long getId() {

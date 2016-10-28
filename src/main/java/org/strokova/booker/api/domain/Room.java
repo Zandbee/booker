@@ -38,6 +38,7 @@ public class Room {
     private boolean hasFixedDateReservation = false;
 
     @ManyToOne
+    @JoinColumn(name = "hotel_id")
     private Hotel hotel;
 
     @OneToMany(mappedBy = "room")

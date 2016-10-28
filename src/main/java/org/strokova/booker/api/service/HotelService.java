@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import org.strokova.booker.api.domain.Hotel;
 import org.strokova.booker.api.repository.HotelRepository;
 
+import java.util.List;
+
 /**
  * 28.10.2016.
  */
@@ -21,5 +23,9 @@ public class HotelService {
 
     public Hotel saveHotel(Hotel hotel) {
         return hotelRepository.save(hotel);
+    }
+
+    public List<Hotel> findHotels() {
+        return hotelRepository.findAll();
     }
 }

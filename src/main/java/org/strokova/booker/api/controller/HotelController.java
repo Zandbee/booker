@@ -28,8 +28,8 @@ public class HotelController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String showHotels() {
-        return "HOTELS";
+    public ResponseEntity<?> showHotels() {
+        return new ResponseEntity<>(hotelService.findHotels(), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -41,4 +41,6 @@ public class HotelController {
                 .buildAndExpand(hotel.getId()).toUri());
         return new ResponseEntity<>(hotel, httpHeaders, HttpStatus.CREATED);
     }
+
+    //@RequestMapping()
 }

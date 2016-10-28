@@ -27,7 +27,7 @@ public class Hotel {
     @Column(name = "has_tennis_court")
     private boolean hasTennisCourt = false;
 
-    @OneToMany(mappedBy = "hotel")
+    @OneToMany(mappedBy = "hotel", fetch = FetchType.LAZY)
     private Set<Room> rooms = new HashSet<>();
 
     public Hotel() {}
