@@ -21,7 +21,7 @@ public class Guest {
     @Size(max = 20)
     private String phone;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "guest")
     private Set<Reservation> reservations = new HashSet<>();
 
     public Guest() {}
