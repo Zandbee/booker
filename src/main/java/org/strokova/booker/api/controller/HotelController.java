@@ -25,7 +25,7 @@ public class HotelController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<?> showHotels() {
+    public ResponseEntity<?> readHotels() {
         return new ResponseEntity<>(hotelService.findHotels(), HttpStatus.OK);
     }
 
@@ -40,8 +40,13 @@ public class HotelController {
     }
 
     @RequestMapping(value = "/{hotelId}", method = RequestMethod.GET)
-    public ResponseEntity<?> showHotel(@PathVariable Integer hotelId) {
+    public ResponseEntity<?> readHotel(@PathVariable Integer hotelId) {
         return new ResponseEntity<>(hotelService.findHotel(hotelId), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/{hotelId}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteHotel(@PathVariable Integer hotelId) {
+        hotelService.deleteHotel(hotelId);
+        return ResponseEntity.ok().build();
+    }
 }
