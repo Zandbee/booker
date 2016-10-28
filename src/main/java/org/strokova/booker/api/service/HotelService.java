@@ -28,4 +28,8 @@ public class HotelService {
     public List<Hotel> findHotels() {
         return hotelRepository.findAll();
     }
+
+    public Hotel findHotel(Integer id) {
+        return hotelRepository.findOne(id);
+    }
 }
