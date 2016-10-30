@@ -31,8 +31,6 @@ public class HotelEntity {
     @OneToMany(mappedBy = "hotel")
     private Set<RoomEntity> rooms = new HashSet<>();
 
-    public HotelEntity() {}
-
     public Integer getId() {
         return id;
     }

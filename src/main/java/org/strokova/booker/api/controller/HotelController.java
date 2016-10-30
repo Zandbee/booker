@@ -1,13 +1,17 @@
 package org.strokova.booker.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.CollectionFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.strokova.booker.api.entity.HotelEntity;
+import org.strokova.booker.api.model.Hotel;
 import org.strokova.booker.api.service.HotelService;
+
+import java.util.Collection;
 
 /**
  * 27.10.2016.
@@ -25,13 +29,13 @@ public class HotelController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<?> readHotels() {
+    public ResponseEntity<Collection<Hotel>> readHotels() {
         return new ResponseEntity<>(hotelService.findHotels(), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> add(@RequestBody HotelEntity input) {
-        HotelEntity hotel = hotelService.saveHotel(input);
+    public ResponseEntity<Hotel> add(@RequestBody Hotel input) {
+        Hotel hotel = hotelService.saveHotel(input);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
@@ -40,7 +44,7 @@ public class HotelController {
     }
 
     @RequestMapping(value = "/{hotelId}", method = RequestMethod.GET)
-    public ResponseEntity<?> readHotel(@PathVariable Integer hotelId) {
+    public ResponseEntity<Hotel> readHotel(@PathVariable Integer hotelId) {
         return new ResponseEntity<>(hotelService.findHotel(hotelId), HttpStatus.OK);
     }
 
@@ -48,5 +52,12 @@ public class HotelController {
     public ResponseEntity<?> deleteHotel(@PathVariable Integer hotelId) {
         hotelService.deleteHotel(hotelId);
         return ResponseEntity.ok().build();
+    }
+
+    @RequestMapping(value = "/{hotelId}", method = RequestMethod.PUT)
+    public ResponseEntity<Hotel> updateHotel(
+            @PathVariable Integer hotelId,
+            @RequestBody Hotel hotel) {
+        return new ResponseEntity<>(hotelService.updateHotel(hotelId, hotel), HttpStatus.OK);
     }
 }

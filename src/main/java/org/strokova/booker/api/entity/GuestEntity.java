@@ -25,13 +25,6 @@ public class GuestEntity {
     @OneToMany(mappedBy = "guest")
     private Set<ReservationEntity> reservations = new HashSet<>();
 
-    public GuestEntity() {}
-
-    public GuestEntity(String name, String phone) {
-        this.name = name;
-        this.phone = phone;
-    }
-
     public Long getId() {
         return id;
     }

@@ -45,8 +45,6 @@ public class RoomEntity {
     @OneToMany(mappedBy = "room")
     private Set<ReservationEntity> reservations = new HashSet<>();
 
-    public RoomEntity() {}
-
     public Long getId() {
         return id;
     }
