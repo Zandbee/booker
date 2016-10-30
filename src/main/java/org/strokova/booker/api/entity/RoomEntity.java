@@ -1,4 +1,4 @@
-package org.strokova.booker.api.domain;
+package org.strokova.booker.api.entity;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -8,7 +8,8 @@ import java.util.Set;
  * 28.10.2016.
  */
 @Entity
-public class Room {
+@Table(name = "room")
+public class RoomEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -39,18 +40,18 @@ public class Room {
 
     @ManyToOne
     @JoinColumn(name = "hotel_id")
-    private Hotel hotel;
+    private HotelEntity hotel;
 
     @OneToMany(mappedBy = "room")
-    private Set<Reservation> reservations = new HashSet<>();
+    private Set<ReservationEntity> reservations = new HashSet<>();
 
-    public Room() {}
+    public RoomEntity() {}
 
     public Long getId() {
         return id;
     }
 
-    public Room setId(Long id) {
+    public RoomEntity setId(Long id) {
         this.id = id;
         return this;
     }
@@ -59,7 +60,7 @@ public class Room {
         return type;
     }
 
-    public Room setType(RoomType type) {
+    public RoomEntity setType(RoomType type) {
         this.type = type;
         return this;
     }
@@ -68,7 +69,7 @@ public class Room {
         return hasTv;
     }
 
-    public Room setHasTv(boolean hasTv) {
+    public RoomEntity setHasTv(boolean hasTv) {
         this.hasTv = hasTv;
         return this;
     }
@@ -77,7 +78,7 @@ public class Room {
         return hasBalcony;
     }
 
-    public Room setHasBalcony(boolean hasBalcony) {
+    public RoomEntity setHasBalcony(boolean hasBalcony) {
         this.hasBalcony = hasBalcony;
         return this;
     }
@@ -86,7 +87,7 @@ public class Room {
         return hasAirConditioner;
     }
 
-    public Room setHasAirConditioner(boolean hasAirConditioner) {
+    public RoomEntity setHasAirConditioner(boolean hasAirConditioner) {
         this.hasAirConditioner = hasAirConditioner;
         return this;
     }
@@ -95,7 +96,7 @@ public class Room {
         return hasRubbishView;
     }
 
-    public Room setHasRubbishView(boolean hasRubbishView) {
+    public RoomEntity setHasRubbishView(boolean hasRubbishView) {
         this.hasRubbishView = hasRubbishView;
         return this;
     }
@@ -104,7 +105,7 @@ public class Room {
         return hasPoolView;
     }
 
-    public Room setHasPoolView(boolean hasPoolView) {
+    public RoomEntity setHasPoolView(boolean hasPoolView) {
         this.hasPoolView = hasPoolView;
         return this;
     }
@@ -113,7 +114,7 @@ public class Room {
         return hasSeaView;
     }
 
-    public Room setHasSeaView(boolean hasSeaView) {
+    public RoomEntity setHasSeaView(boolean hasSeaView) {
         this.hasSeaView = hasSeaView;
         return this;
     }
@@ -122,25 +123,25 @@ public class Room {
         return hasFixedDateReservation;
     }
 
-    public Room setHasFixedDateReservation(boolean hasFixedDateReservation) {
+    public RoomEntity setHasFixedDateReservation(boolean hasFixedDateReservation) {
         this.hasFixedDateReservation = hasFixedDateReservation;
         return this;
     }
 
-    public Hotel getHotel() {
+    public HotelEntity getHotel() {
         return hotel;
     }
 
-    public Room setHotel(Hotel hotel) {
+    public RoomEntity setHotel(HotelEntity hotel) {
         this.hotel = hotel;
         return this;
     }
 
-    public Set<Reservation> getReservations() {
+    public Set<ReservationEntity> getReservations() {
         return reservations;
     }
 
-    public Room setReservations(Set<Reservation> reservations) {
+    public RoomEntity setReservations(Set<ReservationEntity> reservations) {
         this.reservations = reservations;
         return this;
     }

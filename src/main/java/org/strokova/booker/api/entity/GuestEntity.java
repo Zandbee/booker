@@ -1,4 +1,4 @@
-package org.strokova.booker.api.domain;
+package org.strokova.booker.api.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -9,7 +9,8 @@ import java.util.Set;
  * 28.10.2016.
  */
 @Entity
-public class Guest {
+@Table(name = "guest")
+public class GuestEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,11 +23,11 @@ public class Guest {
     private String phone;
 
     @OneToMany(mappedBy = "guest")
-    private Set<Reservation> reservations = new HashSet<>();
+    private Set<ReservationEntity> reservations = new HashSet<>();
 
-    public Guest() {}
+    public GuestEntity() {}
 
-    public Guest(String name, String phone) {
+    public GuestEntity(String name, String phone) {
         this.name = name;
         this.phone = phone;
     }
@@ -35,7 +36,7 @@ public class Guest {
         return id;
     }
 
-    public Guest setId(Long id) {
+    public GuestEntity setId(Long id) {
         this.id = id;
         return this;
     }
@@ -44,7 +45,7 @@ public class Guest {
         return name;
     }
 
-    public Guest setName(String name) {
+    public GuestEntity setName(String name) {
         this.name = name;
         return this;
     }
@@ -53,16 +54,16 @@ public class Guest {
         return phone;
     }
 
-    public Guest setPhone(String phone) {
+    public GuestEntity setPhone(String phone) {
         this.phone = phone;
         return this;
     }
 
-    public Set<Reservation> getReservations() {
+    public Set<ReservationEntity> getReservations() {
         return reservations;
     }
 
-    public Guest setReservations(Set<Reservation> reservations) {
+    public GuestEntity setReservations(Set<ReservationEntity> reservations) {
         this.reservations = reservations;
         return this;
     }

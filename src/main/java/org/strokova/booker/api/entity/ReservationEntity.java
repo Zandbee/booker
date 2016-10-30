@@ -1,4 +1,4 @@
-package org.strokova.booker.api.domain;
+package org.strokova.booker.api.entity;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -7,7 +7,8 @@ import java.util.Date;
  * 28.10.2016.
  */
 @Entity
-public class Reservation {
+@Table(name = "reservation")
+public class ReservationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,17 +18,17 @@ public class Reservation {
 
     @ManyToOne
     @JoinColumn(name = "room_id")
-    private Room room;
+    private RoomEntity room;
 
     @ManyToOne
     @JoinColumn(name = "guest_id")
-    private Guest guest;
+    private GuestEntity guest;
 
     public Long getId() {
         return id;
     }
 
-    public Reservation setId(Long id) {
+    public ReservationEntity setId(Long id) {
         this.id = id;
         return this;
     }
@@ -36,7 +37,7 @@ public class Reservation {
         return dateFrom;
     }
 
-    public Reservation setDateFrom(Date dateFrom) {
+    public ReservationEntity setDateFrom(Date dateFrom) {
         this.dateFrom = dateFrom;
         return this;
     }
@@ -45,25 +46,25 @@ public class Reservation {
         return dateTo;
     }
 
-    public Reservation setDateTo(Date dateTo) {
+    public ReservationEntity setDateTo(Date dateTo) {
         this.dateTo = dateTo;
         return this;
     }
 
-    public Room getRoom() {
+    public RoomEntity getRoom() {
         return room;
     }
 
-    public Reservation setRoom(Room room) {
+    public ReservationEntity setRoom(RoomEntity room) {
         this.room = room;
         return this;
     }
 
-    public Guest getGuest() {
+    public GuestEntity getGuest() {
         return guest;
     }
 
-    public Reservation setGuest(Guest guest) {
+    public ReservationEntity setGuest(GuestEntity guest) {
         this.guest = guest;
         return this;
     }

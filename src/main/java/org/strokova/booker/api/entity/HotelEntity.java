@@ -1,4 +1,4 @@
-package org.strokova.booker.api.domain;
+package org.strokova.booker.api.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -9,7 +9,8 @@ import java.util.Set;
  * 28.10.2016.
  */
 @Entity
-public class Hotel {
+@Table(name = "hotel")
+public class HotelEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -27,10 +28,10 @@ public class Hotel {
     @Column(name = "has_tennis_court")
     private boolean hasTennisCourt = false;
 
-    @OneToMany(mappedBy = "hotel", fetch = FetchType.LAZY)
-    private Set<Room> rooms = new HashSet<>();
+    @OneToMany(mappedBy = "hotel")
+    private Set<RoomEntity> rooms = new HashSet<>();
 
-    public Hotel() {}
+    public HotelEntity() {}
 
     public Integer getId() {
         return id;
@@ -52,36 +53,36 @@ public class Hotel {
         return hasTennisCourt;
     }
 
-    public Hotel setId(Integer id) {
+    public HotelEntity setId(Integer id) {
         this.id = id;
         return this;
     }
 
-    public Hotel setName(String name) {
+    public HotelEntity setName(String name) {
         this.name = name;
         return this;
     }
 
-    public Hotel setHasPool(boolean hasPool) {
+    public HotelEntity setHasPool(boolean hasPool) {
         this.hasPool = hasPool;
         return this;
     }
 
-    public Hotel setHasWaterpark(boolean hasWaterpark) {
+    public HotelEntity setHasWaterpark(boolean hasWaterpark) {
         this.hasWaterpark = hasWaterpark;
         return this;
     }
 
-    public Hotel setHasTennisCourt(boolean hasTennisCourt) {
+    public HotelEntity setHasTennisCourt(boolean hasTennisCourt) {
         this.hasTennisCourt = hasTennisCourt;
         return this;
     }
 
-    public Set<Room> getRooms() {
+    public Set<RoomEntity> getRooms() {
         return rooms;
     }
 
-    public Hotel setRooms(Set<Room> rooms) {
+    public HotelEntity setRooms(Set<RoomEntity> rooms) {
         this.rooms = rooms;
         return this;
     }

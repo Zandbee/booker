@@ -1,4 +1,4 @@
-package org.strokova.booker.api.domain;
+package org.strokova.booker.api.entity;
 
 /**
  * 28.10.2016.

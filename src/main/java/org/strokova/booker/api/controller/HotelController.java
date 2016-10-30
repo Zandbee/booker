@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.strokova.booker.api.domain.Hotel;
+import org.strokova.booker.api.entity.HotelEntity;
 import org.strokova.booker.api.service.HotelService;
 
 /**
@@ -30,8 +30,8 @@ public class HotelController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> add(@RequestBody Hotel input) {
-        Hotel hotel = hotelService.saveHotel(input);
+    public ResponseEntity<?> add(@RequestBody HotelEntity input) {
+        HotelEntity hotel = hotelService.saveHotel(input);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
