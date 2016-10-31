@@ -59,7 +59,7 @@ public class HotelService {
         Predicate searchPredicate = null; // TODO: is it good?
         for (Map.Entry<String, String> predicate: predicates.entrySet()) {
             if (predicate.getKey().equalsIgnoreCase("hasPool")) {
-                searchPredicate = ;
+                //searchPredicate = ;
             }
         }
 
