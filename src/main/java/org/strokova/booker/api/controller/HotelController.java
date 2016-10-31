@@ -12,6 +12,7 @@ import org.strokova.booker.api.model.Hotel;
 import org.strokova.booker.api.service.HotelService;
 
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * 27.10.2016.
@@ -31,6 +32,11 @@ public class HotelController {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Collection<Hotel>> readHotels() {
         return new ResponseEntity<>(hotelService.findHotels(), HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseEntity<Collection<Hotel>> readHotels(@PathVariable Map<String, String> pathVariables) {
+        return new ResponseEntity<>(hotelService.findHotels(pathVariables), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.POST)

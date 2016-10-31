@@ -1,5 +1,7 @@
 package org.strokova.booker.api.service;
 
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,8 +10,9 @@ import org.strokova.booker.api.entity.HotelEntityFactory;
 import org.strokova.booker.api.model.Hotel;
 import org.strokova.booker.api.repository.HotelRepository;
 
-import java.util.Collection;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * 28.10.2016.
@@ -43,6 +46,29 @@ public class HotelService {
     public Collection<Hotel> findHotels() {
         return hotelRepository.findAll()
                 .stream()
+                .map(Hotel::new)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public Collection<Hotel> findHotels(Map<String, String> predicates) {
+        if (predicates.isEmpty()) {
+            return findHotels();
+        }
+
+        Predicate searchPredicate = null; // TODO: is it good?
+        for (Map.Entry<String, String> predicate: predicates.entrySet()) {
+            if (predicate.getKey().equalsIgnoreCase("hasPool")) {
+                searchPredicate = ;
+            }
+        }
+
+        if (searchPredicate == null) {
+            return Collections.emptyList();
+        }
+
+        // TODO: parallel and sequential streams - ??
+        return StreamSupport.stream(hotelRepository.findAll(searchPredicate).spliterator(), false)
                 .map(Hotel::new)
                 .collect(Collectors.toList());
     }
