@@ -1,7 +1,7 @@
 package org.strokova.booker.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.CollectionFactory;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,4 +60,6 @@ public class HotelController {
             @RequestBody Hotel hotel) {
         return new ResponseEntity<>(hotelService.updateHotel(hotelId, hotel), HttpStatus.OK);
     }
+
+    // TODO: add methods for pagination (and sorting?)
 }
