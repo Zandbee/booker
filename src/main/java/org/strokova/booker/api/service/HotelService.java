@@ -1,25 +1,19 @@
 package org.strokova.booker.api.service;
 
-import com.google.common.collect.ImmutableList;
 import com.querydsl.core.BooleanBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.strokova.booker.api.entity.HotelEntity;
 import org.strokova.booker.api.entity.HotelEntityFactory;
 import org.strokova.booker.api.model.Hotel;
-import org.strokova.booker.api.queryParameters.HotelQueryParameter;
+import org.strokova.booker.api.queryParameters.HotelParameter;
 import org.strokova.booker.api.repository.HotelRepository;
 
-import static org.strokova.booker.api.Utils.*;
 import static org.strokova.booker.api.searchPredicate.HotelSearchPredicates.*;
-import static org.strokova.booker.api.queryParameters.HotelQueryParameter.*;
-
-import java.util.*;
-import java.util.stream.Collectors;
+import static org.strokova.booker.api.service.ServiceUtils.determineSortDirection;
 
 /**
  * 28.10.2016.
@@ -50,65 +44,17 @@ public class HotelService {
     }
 
     @Transactional(readOnly = true)
-    public Collection<Hotel> findHotels() {
-        return hotelRepository.findAll()
-                .stream()
-                .map(Hotel::new)
-                .collect(Collectors.toList());
-    }
-
-    @Transactional(readOnly = true)
-    public Collection<Hotel> findHotels(Map<String, String> params) {
-        // return all hotels if there are no query parameters
-        if (params.isEmpty()) {
-            return findHotels();
-        }
-
-        BooleanBuilder predicate = new BooleanBuilder();
-        addParamsToSearchPredicate(params, predicate);
-
-        // return empty collection if all the query parameters are invalid
-        if (!predicate.hasValue()) {
-            return Collections.emptyList();
-        }
-
-        return convertHotelEntityIterableToHotelCollection(hotelRepository.findAll(predicate.getValue()));
-    }
-
-    @Transactional(readOnly = true)
-    public Page<Hotel> findHotels(int page, int size) {
-        return hotelRepository
-                .findAll(new PageRequest(page, size))
+    public Page<Hotel> findHotels(Integer page, Integer size, String order, String by,
+            String name, Boolean hasPool, Boolean hasWaterpark, Boolean hasTennisCourt) {
+        return hotelRepository.findAll(
+                createSearchPredicate(name, hasPool, hasWaterpark, hasTennisCourt),
+                createPageRequest(page, size, order, by))
                 .map(Hotel::new);
-    }
-
-    @Transactional(readOnly = true)
-    public Page<Hotel> findHotels(int page, int size, String order) {
-        return findHotels(page, size, order, HotelQueryParameter.ID.getSortColumn());
-    }
-
-    @Transactional(readOnly = true)
-    public Page<Hotel> findHotels(int page, int size, String order, String by) {
-        return hotelRepository
-                .findAll(new PageRequest(
-                        page, size, ServiceUtils.determineDirection(order), determineSortProperty(by)))
-                .map(Hotel::new);
-    }
-
-    @Transactional(readOnly = true)
-    public Collection<Hotel> findHotels(String order, String by) {
-        return convertHotelEntityIterableToHotelCollection(
-                hotelRepository.findAll(new Sort(ServiceUtils.determineDirection(order), determineSortProperty(by))));
     }
 
     @Transactional(readOnly = true)
     public Hotel findHotel(Integer id) {
         return new Hotel(hotelRepository.findOne(id));
-    }
-
-    @Transactional(readOnly = true)
-    public Hotel findHotel(String hotelName) {
-        return new Hotel(hotelRepository.findByNameIgnoreCase(hotelName));
     }
 
     @Transactional
@@ -124,40 +70,39 @@ public class HotelService {
                 .setHasTennisCourt(data.isHasTennisCourt());
     }
 
-    private static void addParamsToSearchPredicate(Map<String, String> params, BooleanBuilder predicate) {
-        for (Map.Entry<String, String> param: params.entrySet()) {
-            String paramKey = param.getKey();
-            String paramValue = param.getValue();
-            if (paramKey.equalsIgnoreCase(HAS_POOL.getQueryParameterName())) {
-                predicate.and(hasPool(booleanFrom(paramValue)));
-            } else if (paramKey.equalsIgnoreCase(HAS_WATERPARK.getQueryParameterName())) {
-                predicate.and(hasWaterpark(booleanFrom(paramValue)));
-            } else if (paramKey.equalsIgnoreCase(HAS_TENNIS_COURT.getQueryParameterName())) {
-                predicate.and(hasTennisCourt(booleanFrom(paramValue)));
-            }
+    private static BooleanBuilder createSearchPredicate(
+            String name, Boolean hasPool, Boolean hasWaterpark, Boolean hasTennisCourt) {
+        BooleanBuilder predicate = new BooleanBuilder();
+        if (name != null && !name.trim().isEmpty()) {
+            predicate.and(nameIs(name.trim()));
         }
+        if (hasPool != null) {
+            predicate.and(hasPool(hasPool));
+        }
+        if (hasWaterpark != null) {
+            predicate.and(hasWaterpark(hasWaterpark));
+        }
+        if (hasTennisCourt != null) {
+            predicate.and(hasTennisCourt(hasTennisCourt));
+        }
+        return predicate;
     }
 
-    private static Collection<Hotel> convertHotelEntityIterableToHotelCollection(Iterable<HotelEntity> entities) {
-        ImmutableList.Builder<Hotel> result = ImmutableList.builder();
-        for (HotelEntity entity : entities) {
-            result.add(new Hotel(entity));
-        }
-
-        return result.build();
+    private static PageRequest createPageRequest(Integer page, Integer size, String order, String by) {
+        return new PageRequest(page, size, determineSortDirection(order), determineSortProperty(by));
     }
 
     private static String determineSortProperty(String by) {
         String sortProperty = null;
 
-        for (HotelQueryParameter param : HotelQueryParameter.values()) {
-            if (by.equalsIgnoreCase(param.getSortColumn())) {
+        for (HotelParameter param : HotelParameter.values()) {
+            if (by.equalsIgnoreCase(param.getQueryParameterName())) {
                 sortProperty = param.getColumnName();
             }
         }
         // if by param is invalid - order by name
         if (sortProperty == null) {
-            sortProperty = HotelQueryParameter.NAME.getColumnName();
+            sortProperty = HotelParameter.NAME.getColumnName();
         }
 
         return sortProperty;

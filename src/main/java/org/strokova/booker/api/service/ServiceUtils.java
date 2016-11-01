@@ -9,7 +9,7 @@ import org.springframework.data.domain.Sort;
 final class ServiceUtils {
 
     // package-private
-    static Sort.Direction determineDirection(String order) {
+    static Sort.Direction determineSortDirection(String order) {
         if (order != null && order.equalsIgnoreCase("desc")) {
             return Sort.Direction.DESC;
         } else {

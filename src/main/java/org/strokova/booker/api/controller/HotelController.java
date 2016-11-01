@@ -8,10 +8,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.strokova.booker.api.model.Hotel;
+import org.strokova.booker.api.queryParameters.HotelParameter;
+import org.strokova.booker.api.queryParameters.HotelQueryParameters;
 import org.strokova.booker.api.service.HotelService;
 
 import java.util.Collection;
 import java.util.Map;
+
+import static org.strokova.booker.api.queryParameters.HotelQueryParameters.*;
 
 /**
  * 27.10.2016.
@@ -21,6 +25,10 @@ import java.util.Map;
 @RequestMapping("/hotels")
 public class HotelController {
 
+    private static final String DEFAULT_PAGE_SIZE = "25";
+    private static final String DEFAULT_PAGE_NUMBER = "0";
+    private static final String DEFAULT_SORT_ORDER = "ASC";
+
     private final HotelService hotelService;
 
     @Autowired
@@ -28,51 +36,28 @@ public class HotelController {
         this.hotelService = hotelService;
     }
 
-    @RequestMapping(method = RequestMethod.GET, params = {}) // TODO: is never called :(
-    public ResponseEntity<Collection<Hotel>> readHotels() {
-        return new ResponseEntity<>(hotelService.findHotels(), HttpStatus.OK);
-    }
-
-    @RequestMapping(method = RequestMethod.GET, params = {"!page", "!size", "!order", "!by"})
-    public ResponseEntity<Collection<Hotel>> readHotels(
-            @RequestParam Map<String, String> params) {
-        System.out.println("CALLING: {\"!page\", \"!size\", \"!order\", \"!by\"}");
-        return new ResponseEntity<>(hotelService.findHotels(params), HttpStatus.OK);
-    }
-
-    @RequestMapping(method = RequestMethod.GET, params = {"page", "size"})
+    @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Page<Hotel>> readHotels(
-            @RequestParam("page") int page,
-            @RequestParam("size") int size) {
-        System.out.println("CALLING: {\"page\", \"size\"}");
-        return new ResponseEntity<>(hotelService.findHotels(page, size), HttpStatus.OK);
-    }
-
-    @RequestMapping(method = RequestMethod.GET, params = {"page", "size", "order"})
-    public ResponseEntity<Page<Hotel>> readHotels(
-            @RequestParam("page") int page,
-            @RequestParam("size") int size,
-            @RequestParam("order") String order) {
-        System.out.println("CALLING: {\"page\", \"size\", \"order\"}");
-        return new ResponseEntity<>(hotelService.findHotels(page, size, order), HttpStatus.OK);
-    }
-
-    @RequestMapping(method = RequestMethod.GET, params = {"page", "size", "order", "by"})
-    public ResponseEntity<Page<Hotel>> readHotels(
-            @RequestParam("page") int page,
-            @RequestParam("size") int size,
-            @RequestParam("order") String order,
-            @RequestParam("by") String by) {
-        System.out.println("CALLING: {\"page\", \"size\", \"order\", \"by\"}");
-        return new ResponseEntity<>(hotelService.findHotels(page, size, order, by), HttpStatus.OK);
-    }
-
-    @RequestMapping(method = RequestMethod.GET, params = {"order", "by"})
-    public ResponseEntity<Collection<Hotel>> readHotels(
-            @RequestParam("order") String order,
-            @RequestParam("by") String by) {
-        System.out.println("CALLING: {\"order\", \"by\"}");
-        return new ResponseEntity<>(hotelService.findHotels(order, by), HttpStatus.OK);
+            @RequestParam(value = "page", defaultValue = DEFAULT_PAGE_NUMBER, required = false)
+                    Integer page,
+            @RequestParam(value = "size", defaultValue = DEFAULT_PAGE_SIZE, required = false)
+                    Integer size,
+            @RequestParam(value = "order", defaultValue = DEFAULT_SORT_ORDER, required = false)
+                    String order,
+            @RequestParam(value = "by", defaultValue = HOTEL_QUERY_PARAM_ID, required = false)
+                    String by,
+            @RequestParam(value = HOTEL_QUERY_PARAM_NAME, required = false)
+                    String name,
+            @RequestParam(value = HOTEL_QUERY_PARAM_HAS_POOL, required = false)
+                    Boolean hasPool,
+            @RequestParam(value = HOTEL_QUERY_PARAM_HAS_WATERPARK, required = false)
+                    Boolean hasWaterpark,
+            @RequestParam(value = HOTEL_QUERY_PARAM_HAS_TENNIS_COURT, required = false)
+                    Boolean hasTennisCourt
+    ) {
+        return new ResponseEntity<>(
+                hotelService.findHotels(page, size, order, by, name, hasPool, hasWaterpark, hasTennisCourt),
+                HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -89,12 +74,6 @@ public class HotelController {
     public ResponseEntity<Hotel> readHotel(@PathVariable Integer hotelId) {
         return new ResponseEntity<>(hotelService.findHotel(hotelId), HttpStatus.OK);
     }
-
-    @RequestMapping(value = "/{hotelName}", method = RequestMethod.GET)
-    public ResponseEntity<Hotel> readHotel(@PathVariable() String hotelName) {
-        return new ResponseEntity<>(hotelService.findHotel(hotelName), HttpStatus.OK);
-    }
-    // TODO: multiple names in hotelName var?
 
     @RequestMapping(value = "/{hotelId}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteHotel(@PathVariable Integer hotelId) {
