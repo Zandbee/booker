@@ -21,5 +21,7 @@ public final class HotelSearchPredicates {
         return QHotelEntity.hotelEntity.hasTennisCourt.eq(value);
     }
 
-    // TODO: need something for rooms?
+    public static BooleanExpression nameIn(String... value) {
+        return QHotelEntity.hotelEntity.name.in(value);
+    }
 }

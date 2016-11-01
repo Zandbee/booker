@@ -3,15 +3,20 @@ package org.strokova.booker.api.service;
 import com.google.common.collect.ImmutableList;
 import com.querydsl.core.BooleanBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.strokova.booker.api.entity.HotelEntity;
 import org.strokova.booker.api.entity.HotelEntityFactory;
 import org.strokova.booker.api.model.Hotel;
+import org.strokova.booker.api.queryParameters.HotelQueryParameter;
 import org.strokova.booker.api.repository.HotelRepository;
 
+import static org.strokova.booker.api.Utils.*;
 import static org.strokova.booker.api.searchPredicate.HotelSearchPredicates.*;
-import static org.strokova.booker.api.queryParameters.HotelQueryParameters.*;
+import static org.strokova.booker.api.queryParameters.HotelQueryParameter.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -67,19 +72,39 @@ public class HotelService {
             return Collections.emptyList();
         }
 
-        Iterable<HotelEntity> hotels = hotelRepository.findAll(predicate.getValue());
-        ImmutableList.Builder<Hotel> result = ImmutableList.builder();
-        for (HotelEntity hotel : hotels) {
-            result.add(new Hotel(hotel));
-        }
-
-        return result.build();
+        return convertHotelEntityIterableToHotelCollection(hotelRepository.findAll(predicate.getValue()));
     }
 
+    @Transactional(readOnly = true)
+    public Page<Hotel> findHotels(int page, int size) {
+        return hotelRepository
+                .findAll(new PageRequest(page, size))
+                .map(Hotel::new);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Hotel> findHotels(int page, int size, String order) {
+        return hotelRepository
+                .findAll(new PageRequest(page, size, ServiceUtils.determineDirection(order)))
+                .map(Hotel::new);
+    }
+
+    @Transactional(readOnly = true)
+    public Collection<Hotel> findHotels(String by, String order) {
+        String sortProperty = determineSortProperty(by);
+
+        return convertHotelEntityIterableToHotelCollection(
+                hotelRepository.findAll(new Sort(ServiceUtils.determineDirection(order), sortProperty)));
+    }
 
     @Transactional(readOnly = true)
     public Hotel findHotel(Integer id) {
         return new Hotel(hotelRepository.findOne(id));
+    }
+
+    @Transactional(readOnly = true)
+    public Hotel findHotel(String hotelName) {
+        return new Hotel(hotelRepository.findByNameIgnoreCase(hotelName));
     }
 
     @Transactional
@@ -109,7 +134,28 @@ public class HotelService {
         }
     }
 
-    private static Boolean booleanFrom(String string) {
-        return Boolean.valueOf(string);
+    private static Collection<Hotel> convertHotelEntityIterableToHotelCollection(Iterable<HotelEntity> entities) {
+        ImmutableList.Builder<Hotel> result = ImmutableList.builder();
+        for (HotelEntity entity : entities) {
+            result.add(new Hotel(entity));
+        }
+
+        return result.build();
+    }
+
+    private static String determineSortProperty(String by) {
+        String sortProperty = null;
+
+        for (HotelQueryParameter param : HotelQueryParameter.values()) {
+            if (by.equalsIgnoreCase(param.getSortColumn())) {
+                sortProperty = param.getColumnName();
+            }
+        }
+        // if by param is invalid - order by name
+        if (sortProperty == null) {
+            sortProperty = HotelQueryParameter.NAME.getColumnName();
+        }
+
+        return sortProperty;
     }
 }

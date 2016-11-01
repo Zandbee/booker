@@ -12,4 +12,7 @@ import org.strokova.booker.api.entity.HotelEntity;
 @Repository
 @Transactional(readOnly = true)
 public interface HotelRepository extends JpaRepository<HotelEntity, Integer>, QueryDslPredicateExecutor<HotelEntity> {
+
+    HotelEntity findByNameIgnoreCase(String name);
+
 }

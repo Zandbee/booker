@@ -11,36 +11,36 @@ import java.util.Date;
 public final class ReservationSearchPredicates {
     private ReservationSearchPredicates() {}
 
-    public static BooleanExpression dateFromIs(Date datePredicate) {
-        return QReservationEntity.reservationEntity.dateFrom.eq(datePredicate);
+    public static BooleanExpression dateFromIs(Date value) {
+        return QReservationEntity.reservationEntity.dateFrom.eq(value);
     }
 
-    public static BooleanExpression dateFromIsBefore(Date datePredicate) {
-        return QReservationEntity.reservationEntity.dateFrom.before(datePredicate);
+    public static BooleanExpression dateFromIsBefore(Date value) {
+        return QReservationEntity.reservationEntity.dateFrom.before(value);
     }
 
-    public static BooleanExpression dateFromIsAfter(Date datePredicate) {
-        return QReservationEntity.reservationEntity.dateFrom.after(datePredicate);
+    public static BooleanExpression dateFromIsAfter(Date value) {
+        return QReservationEntity.reservationEntity.dateFrom.after(value);
     }
 
-    public static BooleanExpression dateFromIsAfter(Date fromPredicate, Date toPredicate) {
-        return QReservationEntity.reservationEntity.dateFrom.between(fromPredicate, toPredicate);
+    public static BooleanExpression dateFromIsAfter(Date valueFrom, Date valueTo) {
+        return QReservationEntity.reservationEntity.dateFrom.between(valueFrom, valueTo);
     }
 
-    public static BooleanExpression dateToIs(Date datePredicate) {
-        return QReservationEntity.reservationEntity.dateTo.eq(datePredicate);
+    public static BooleanExpression dateToIs(Date value) {
+        return QReservationEntity.reservationEntity.dateTo.eq(value);
     }
 
-    public static BooleanExpression dateToIsBefore(Date datePredicate) {
-        return QReservationEntity.reservationEntity.dateTo.before(datePredicate);
+    public static BooleanExpression dateToIsBefore(Date value) {
+        return QReservationEntity.reservationEntity.dateTo.before(value);
     }
 
-    public static BooleanExpression dateToIsAfter(Date datePredicate) {
-        return QReservationEntity.reservationEntity.dateTo.after(datePredicate);
+    public static BooleanExpression dateToIsAfter(Date value) {
+        return QReservationEntity.reservationEntity.dateTo.after(value);
     }
 
-    public static BooleanExpression dateToIsAfter(Date fromPredicate, Date toPredicate) {
-        return QReservationEntity.reservationEntity.dateTo.between(fromPredicate, toPredicate);
+    public static BooleanExpression dateToIsAfter(Date valueFrom, Date valueTo) {
+        return QReservationEntity.reservationEntity.dateTo.between(valueFrom, valueTo);
     }
 
     // TODO: something for guest, room
