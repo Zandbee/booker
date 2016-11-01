@@ -35,9 +35,9 @@ public class HotelController {
 
     @RequestMapping(method = RequestMethod.GET, params = {"!page", "!size", "!order", "!by"})
     public ResponseEntity<Collection<Hotel>> readHotels(
-            @RequestParam Map<String, String> pathVariables) {
+            @RequestParam Map<String, String> params) {
         System.out.println("CALLING: {\"!page\", \"!size\", \"!order\", \"!by\"}");
-        return new ResponseEntity<>(hotelService.findHotels(pathVariables), HttpStatus.OK);
+        return new ResponseEntity<>(hotelService.findHotels(params), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, params = {"page", "size"})
