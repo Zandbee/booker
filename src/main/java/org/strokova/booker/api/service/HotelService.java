@@ -84,17 +84,21 @@ public class HotelService {
 
     @Transactional(readOnly = true)
     public Page<Hotel> findHotels(int page, int size, String order) {
+        return findHotels(page, size, order, HotelQueryParameter.ID.getSortColumn());
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Hotel> findHotels(int page, int size, String order, String by) {
         return hotelRepository
-                .findAll(new PageRequest(page, size, ServiceUtils.determineDirection(order)))
+                .findAll(new PageRequest(
+                        page, size, ServiceUtils.determineDirection(order), determineSortProperty(by)))
                 .map(Hotel::new);
     }
 
     @Transactional(readOnly = true)
-    public Collection<Hotel> findHotels(String by, String order) {
-        String sortProperty = determineSortProperty(by);
-
+    public Collection<Hotel> findHotels(String order, String by) {
         return convertHotelEntityIterableToHotelCollection(
-                hotelRepository.findAll(new Sort(ServiceUtils.determineDirection(order), sortProperty)));
+                hotelRepository.findAll(new Sort(ServiceUtils.determineDirection(order), determineSortProperty(by))));
     }
 
     @Transactional(readOnly = true)
@@ -124,11 +128,11 @@ public class HotelService {
         for (Map.Entry<String, String> param: params.entrySet()) {
             String paramKey = param.getKey();
             String paramValue = param.getValue();
-            if (paramKey.equalsIgnoreCase(HAS_POOL.name())) {
+            if (paramKey.equalsIgnoreCase(HAS_POOL.getQueryParameterName())) {
                 predicate.and(hasPool(booleanFrom(paramValue)));
-            } else if (paramKey.equalsIgnoreCase(HAS_WATERPARK.name())) {
+            } else if (paramKey.equalsIgnoreCase(HAS_WATERPARK.getQueryParameterName())) {
                 predicate.and(hasWaterpark(booleanFrom(paramValue)));
-            } else if (paramKey.equalsIgnoreCase(HAS_TENNIS_COURT.name())) {
+            } else if (paramKey.equalsIgnoreCase(HAS_TENNIS_COURT.getQueryParameterName())) {
                 predicate.and(hasTennisCourt(booleanFrom(paramValue)));
             }
         }

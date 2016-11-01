@@ -28,36 +28,51 @@ public class HotelController {
         this.hotelService = hotelService;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET, params = {}) // TODO: is never called :(
     public ResponseEntity<Collection<Hotel>> readHotels() {
         return new ResponseEntity<>(hotelService.findHotels(), HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<Collection<Hotel>> readHotels(@RequestParam Map<String, String> pathVariables) {
+    @RequestMapping(method = RequestMethod.GET, params = {"!page", "!size", "!order", "!by"})
+    public ResponseEntity<Collection<Hotel>> readHotels(
+            @RequestParam Map<String, String> pathVariables) {
+        System.out.println("CALLING: {\"!page\", \"!size\", \"!order\", \"!by\"}");
         return new ResponseEntity<>(hotelService.findHotels(pathVariables), HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET, params = {"page", "size"})
     public ResponseEntity<Page<Hotel>> readHotels(
             @RequestParam("page") int page,
             @RequestParam("size") int size) {
+        System.out.println("CALLING: {\"page\", \"size\"}");
         return new ResponseEntity<>(hotelService.findHotels(page, size), HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET, params = {"page", "size", "order"})
     public ResponseEntity<Page<Hotel>> readHotels(
             @RequestParam("page") int page,
             @RequestParam("size") int size,
             @RequestParam("order") String order) {
+        System.out.println("CALLING: {\"page\", \"size\", \"order\"}");
         return new ResponseEntity<>(hotelService.findHotels(page, size, order), HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET, params = {"page", "size", "order", "by"})
+    public ResponseEntity<Page<Hotel>> readHotels(
+            @RequestParam("page") int page,
+            @RequestParam("size") int size,
+            @RequestParam("order") String order,
+            @RequestParam("by") String by) {
+        System.out.println("CALLING: {\"page\", \"size\", \"order\", \"by\"}");
+        return new ResponseEntity<>(hotelService.findHotels(page, size, order, by), HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, params = {"order", "by"})
     public ResponseEntity<Collection<Hotel>> readHotels(
-            @RequestParam("by") String by,
-            @RequestParam("order") String order) {
-        return new ResponseEntity<>(hotelService.findHotels(by, order), HttpStatus.OK);
+            @RequestParam("order") String order,
+            @RequestParam("by") String by) {
+        System.out.println("CALLING: {\"order\", \"by\"}");
+        return new ResponseEntity<>(hotelService.findHotels(order, by), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -76,7 +91,7 @@ public class HotelController {
     }
 
     @RequestMapping(value = "/{hotelName}", method = RequestMethod.GET)
-    public ResponseEntity<Hotel> readHotel(@PathVariable String hotelName) {
+    public ResponseEntity<Hotel> readHotel(@PathVariable() String hotelName) {
         return new ResponseEntity<>(hotelService.findHotel(hotelName), HttpStatus.OK);
     }
     // TODO: multiple names in hotelName var?
