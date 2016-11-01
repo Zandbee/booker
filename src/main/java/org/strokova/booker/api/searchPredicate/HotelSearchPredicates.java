@@ -9,16 +9,16 @@ import org.strokova.booker.api.entity.QHotelEntity;
 public final class HotelSearchPredicates {
     private HotelSearchPredicates() {}
 
-    public static BooleanExpression hasPool() {
-        return QHotelEntity.hotelEntity.hasPool.isTrue();
+    public static BooleanExpression hasPool(Boolean value) {
+        return QHotelEntity.hotelEntity.hasPool.eq(value);
     }
 
-    public static BooleanExpression hasWaterpark() {
-        return QHotelEntity.hotelEntity.hasWaterpark.isTrue();
+    public static BooleanExpression hasWaterpark(Boolean value) {
+        return QHotelEntity.hotelEntity.hasWaterpark.eq(value);
     }
 
-    public static BooleanExpression hasTennisCourt() {
-        return QHotelEntity.hotelEntity.hasTennisCourt.isTrue();
+    public static BooleanExpression hasTennisCourt(Boolean value) {
+        return QHotelEntity.hotelEntity.hasTennisCourt.eq(value);
     }
 
     // TODO: need something for rooms?

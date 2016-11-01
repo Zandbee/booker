@@ -1,7 +1,6 @@
 package org.strokova.booker.api.model;
 
 import org.strokova.booker.api.entity.RoomEntity;
-import org.strokova.booker.api.entity.RoomType;
 
 import java.util.Objects;
 

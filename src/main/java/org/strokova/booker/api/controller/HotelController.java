@@ -35,7 +35,7 @@ public class HotelController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<Collection<Hotel>> readHotels(@PathVariable Map<String, String> pathVariables) {
+    public ResponseEntity<Collection<Hotel>> readHotels(@RequestParam Map<String, String> pathVariables) {
         return new ResponseEntity<>(hotelService.findHotels(pathVariables), HttpStatus.OK);
     }
 

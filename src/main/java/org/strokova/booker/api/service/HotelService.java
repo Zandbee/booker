@@ -1,7 +1,7 @@
 package org.strokova.booker.api.service;
 
-import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.dsl.BooleanExpression;
+import com.google.common.collect.ImmutableList;
+import com.querydsl.core.BooleanBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,9 +10,11 @@ import org.strokova.booker.api.entity.HotelEntityFactory;
 import org.strokova.booker.api.model.Hotel;
 import org.strokova.booker.api.repository.HotelRepository;
 
+import static org.strokova.booker.api.searchPredicate.HotelSearchPredicates.*;
+import static org.strokova.booker.api.queryParameters.HotelQueryParameters.*;
+
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 /**
  * 28.10.2016.
@@ -51,27 +53,29 @@ public class HotelService {
     }
 
     @Transactional(readOnly = true)
-    public Collection<Hotel> findHotels(Map<String, String> predicates) {
-        if (predicates.isEmpty()) {
+    public Collection<Hotel> findHotels(Map<String, String> params) {
+        // return all hotels if there are no query parameters
+        if (params.isEmpty()) {
             return findHotels();
         }
 
-        Predicate searchPredicate = null; // TODO: is it good?
-        for (Map.Entry<String, String> predicate: predicates.entrySet()) {
-            if (predicate.getKey().equalsIgnoreCase("hasPool")) {
-                //searchPredicate = ;
-            }
-        }
+        BooleanBuilder predicate = new BooleanBuilder();
+        addParamsToSearchPredicate(params, predicate);
 
-        if (searchPredicate == null) {
+        // return empty collection if all the query parameters are invalid
+        if (!predicate.hasValue()) {
             return Collections.emptyList();
         }
 
-        // TODO: parallel and sequential streams - ??
-        return StreamSupport.stream(hotelRepository.findAll(searchPredicate).spliterator(), false)
-                .map(Hotel::new)
-                .collect(Collectors.toList());
+        Iterable<HotelEntity> hotels = hotelRepository.findAll(predicate.getValue());
+        ImmutableList.Builder<Hotel> result = ImmutableList.builder();
+        for (HotelEntity hotel : hotels) {
+            result.add(new Hotel(hotel));
+        }
+
+        return result.build();
     }
+
 
     @Transactional(readOnly = true)
     public Hotel findHotel(Integer id) {
@@ -83,11 +87,29 @@ public class HotelService {
         hotelRepository.delete(hotelId);
     }
 
-    private HotelEntity updateHotelData(HotelEntity hotel, Hotel data) {
+    private static HotelEntity updateHotelData(HotelEntity hotel, Hotel data) {
         return hotel
                 .setName(data.getName())
                 .setHasPool(data.isHasPool())
                 .setHasWaterpark(data.isHasWaterpark())
                 .setHasTennisCourt(data.isHasTennisCourt());
+    }
+
+    private static void addParamsToSearchPredicate(Map<String, String> params, BooleanBuilder predicate) {
+        for (Map.Entry<String, String> param: params.entrySet()) {
+            String paramKey = param.getKey();
+            String paramValue = param.getValue();
+            if (paramKey.equalsIgnoreCase(HAS_POOL.name())) {
+                predicate.and(hasPool(booleanFrom(paramValue)));
+            } else if (paramKey.equalsIgnoreCase(HAS_WATERPARK.name())) {
+                predicate.and(hasWaterpark(booleanFrom(paramValue)));
+            } else if (paramKey.equalsIgnoreCase(HAS_TENNIS_COURT.name())) {
+                predicate.and(hasTennisCourt(booleanFrom(paramValue)));
+            }
+        }
+    }
+
+    private static Boolean booleanFrom(String string) {
+        return Boolean.valueOf(string);
     }
 }

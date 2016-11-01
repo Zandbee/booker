@@ -11,32 +11,32 @@ public final class RoomSearchPredicates {
 
     //public static BooleanExpression typeIs()
 
-    public static BooleanExpression hasTv() {
-        return QRoomEntity.roomEntity.hasTv.isTrue();
+    public static BooleanExpression hasTv(Boolean value) {
+        return QRoomEntity.roomEntity.hasTv.eq(value);
     }
 
-    public static BooleanExpression hasBalcony() {
-        return QRoomEntity.roomEntity.hasBalcony.isTrue();
+    public static BooleanExpression hasBalcony(Boolean value) {
+        return QRoomEntity.roomEntity.hasBalcony.eq(value);
     }
 
-    public static BooleanExpression hasAirConditioner() {
-        return QRoomEntity.roomEntity.hasAirConditioner.isTrue();
+    public static BooleanExpression hasAirConditioner(Boolean value) {
+        return QRoomEntity.roomEntity.hasAirConditioner.eq(value);
     }
 
-    public static BooleanExpression hasRubbishView() {
-        return QRoomEntity.roomEntity.hasRubbishView.isTrue();
+    public static BooleanExpression hasRubbishView(Boolean value) {
+        return QRoomEntity.roomEntity.hasRubbishView.eq(value);
     }
 
-    public static BooleanExpression hasPoolView() {
-        return QRoomEntity.roomEntity.hasPoolView.isTrue();
+    public static BooleanExpression hasPoolView(Boolean value) {
+        return QRoomEntity.roomEntity.hasPoolView.eq(value);
     }
 
-    public static BooleanExpression hasSeaView() {
-        return QRoomEntity.roomEntity.hasSeaView.isTrue();
+    public static BooleanExpression hasSeaView(Boolean value) {
+        return QRoomEntity.roomEntity.hasSeaView.eq(value);
     }
 
-    public static BooleanExpression hasFixedDateReservation() {
-        return QRoomEntity.roomEntity.hasFixedDateReservation.isTrue();
+    public static BooleanExpression hasFixedDateReservation(Boolean value) {
+        return QRoomEntity.roomEntity.hasFixedDateReservation.eq(value);
     }
 
     // TODO: something for hotel, reservations
