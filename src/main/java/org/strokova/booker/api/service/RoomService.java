@@ -56,6 +56,11 @@ public class RoomService {
         return new Room(roomRepository.findByIdAndHotelId(roomId, hotelId));
     }
 
+    @Transactional
+    public void deleteRoom(Long roomId, Integer hotelId) {
+        roomRepository.deleteByIdAndHotelId(roomId, hotelId);
+    }
+
     private static BooleanBuilder createSearchPredicate(RoomType type, Boolean hasTv, Boolean hasBalcony, Boolean hasAirConditioner,
                                                         Boolean hasRubbishView, Boolean hasPoolView, Boolean hasSeaView,
                                                         Boolean hasFixedDateReservation) {

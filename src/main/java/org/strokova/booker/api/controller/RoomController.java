@@ -70,4 +70,13 @@ public class RoomController {
             @PathVariable Integer hotelId) {
         return new ResponseEntity<>(roomService.findRoom(roomId, hotelId), HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/{roomId}", method = RequestMethod.DELETE)
+    public ResponseEntity deleteRoom(
+            @PathVariable Long roomId,
+            @PathVariable Integer hotelId
+    ) {
+        roomService.deleteRoom(roomId, hotelId);
+        return ResponseEntity.ok().build();
+    }
 }

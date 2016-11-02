@@ -13,4 +13,5 @@ import org.strokova.booker.api.entity.RoomEntity;
 @Transactional(readOnly = true)
 public interface RoomRepository extends JpaRepository<RoomEntity, Long>, QueryDslPredicateExecutor<RoomEntity> {
     RoomEntity findByIdAndHotelId(Long roomId, Integer hotelId);
+    void deleteByIdAndHotelId(Long roomId, Integer hotelId);
 }
