@@ -12,6 +12,8 @@ public class Guest {
     private String name;
     private String phone;
 
+    public Guest() {}
+
     public Guest(Long id, String name, String phone) {
         this.id = id;
         this.name = name;

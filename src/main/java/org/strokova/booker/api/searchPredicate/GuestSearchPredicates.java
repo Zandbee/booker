@@ -12,11 +12,8 @@ public final class GuestSearchPredicates {
     public static BooleanExpression nameIs(String namePredicate) {
         return QGuestEntity.guestEntity.name.equalsIgnoreCase(namePredicate);
     }
-    // TODO: nameIn(String... names)?
 
     public static BooleanExpression phoneIs(String phonePredicate) {
         return QGuestEntity.guestEntity.phone.equalsIgnoreCase(phonePredicate);
     }
-
-    // TODO: need something for reservations?
 }

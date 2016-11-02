@@ -15,6 +15,8 @@ public class Reservation {
     private Room room;
     private Guest guest;
 
+    public Reservation() {}
+
     public Reservation(Long id, Date dateFrom, Date dateTo, Room room, Guest guest) {
         this.id = id;
         this.dateFrom = dateFrom;
