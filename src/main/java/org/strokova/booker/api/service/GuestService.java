@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.strokova.booker.api.entity.GuestEntity;
 import org.strokova.booker.api.entity.GuestEntityFactory;
 import org.strokova.booker.api.model.Guest;
 import org.strokova.booker.api.queryParameters.GuestParameter;
@@ -48,6 +49,22 @@ public class GuestService {
     @Transactional
     public void deleteGuest(Long guestId) {
         guestRepository.delete(guestId);
+    }
+
+    @Transactional
+    public Guest updateGuest(Long guestId, Guest newGuestData) {
+        Long newId = newGuestData.getId();
+        if (newId != null && !newId.equals(guestId)) {
+            throw new IllegalArgumentException("Impossible to update guest id");
+        }
+        GuestEntity oldGuestEntity = guestRepository.findOne(guestId);
+        return new Guest(guestRepository.save(updateGuestData(oldGuestEntity, newGuestData)));
+    }
+
+    private static GuestEntity updateGuestData(GuestEntity guest, Guest data) {
+        return guest
+                .setName(data.getName())
+                .setPhone((data.getPhone()));
     }
 
     private static BooleanBuilder createSearchPredicate(String name, String phone) {

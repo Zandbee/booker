@@ -35,13 +35,13 @@ public class HotelService {
     }
 
     @Transactional
-    public Hotel updateHotel(Integer hotelId, Hotel hotel) {
-        Integer newId = hotel.getId();
+    public Hotel updateHotel(Integer hotelId, Hotel newHotelData) {
+        Integer newId = newHotelData.getId();
         if (newId != null && !newId.equals(hotelId)) {
             throw new IllegalArgumentException("Impossible to update hotel id");
         }
         HotelEntity oldHotelEntity = hotelRepository.findOne(hotelId);
-        return new Hotel(hotelRepository.save(updateHotelData(oldHotelEntity, hotel)));
+        return new Hotel(hotelRepository.save(updateHotelData(oldHotelEntity, newHotelData)));
     }
 
     @Transactional(readOnly = true)

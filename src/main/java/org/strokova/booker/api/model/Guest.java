@@ -14,11 +14,11 @@ public class Guest {
 
     public Guest() {}
 
-    public Guest(Long id, String name, String phone) {
+    /*public Guest(Long id, String name, String phone) {
         this.id = id;
         this.name = name;
         this.phone = phone;
-    }
+    }*/
 
     public Guest (GuestEntity guestEntity) {
         this.id = guestEntity.getId();

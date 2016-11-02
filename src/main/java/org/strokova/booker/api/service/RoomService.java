@@ -63,13 +63,13 @@ public class RoomService {
     }
 
     @Transactional
-    public Room updateRoom(Long roomId, Integer hotelId, Room room) {
-        Long newId = room.getId();
+    public Room updateRoom(Long roomId, Integer hotelId, Room newRoomData) {
+        Long newId = newRoomData.getId();
         if (newId != null && newId.equals(roomId)) {
             throw new IllegalArgumentException("Impossible to update room id");
         }
         RoomEntity oldRoomEntity = roomRepository.findByIdAndHotelId(roomId, hotelId);
-        return new Room(roomRepository.save(updateRoomData(oldRoomEntity, room)));
+        return new Room(roomRepository.save(updateRoomData(oldRoomEntity, newRoomData)));
     }
 
     private static RoomEntity updateRoomData(RoomEntity roomEntity, Room data) {

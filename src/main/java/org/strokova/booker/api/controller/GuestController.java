@@ -61,4 +61,9 @@ public class GuestController {
         guestService.deleteGuest(guestId);
         return ResponseEntity.ok().build();
     }
+
+    @RequestMapping(value = "/{guestId}", method = RequestMethod.PUT)
+    public ResponseEntity<Guest> updateGuest(@PathVariable Long guestId, @RequestBody Guest input) {
+        return new ResponseEntity<>(guestService.updateGuest(guestId, input), HttpStatus.OK);
+    }
 }
