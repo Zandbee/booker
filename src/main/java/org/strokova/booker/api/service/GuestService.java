@@ -40,6 +40,11 @@ public class GuestService {
                 .map(Guest::new);
     }
 
+    @Transactional(readOnly = true)
+    public Guest readGuest(Long guestId) {
+        return new Guest(guestRepository.findOne(guestId));
+    }
+
     private static BooleanBuilder createSearchPredicate(String name, String phone) {
         BooleanBuilder predicate = new BooleanBuilder();
         if (name != null && !name.trim().isEmpty()) {

@@ -50,4 +50,9 @@ public class GuestController {
                 .buildAndExpand(guest.getId()).toUri());
         return new ResponseEntity<>(guest, httpHeaders, HttpStatus.CREATED);
     }
+
+    @RequestMapping(value = "/{guestId}", method = RequestMethod.GET)
+    public ResponseEntity<Guest> readGuest(@PathVariable Long guestId) {
+        return new ResponseEntity<Guest>(guestService.readGuest(guestId), HttpStatus.OK);
+    }
 }
