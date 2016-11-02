@@ -51,6 +51,11 @@ public class RoomService {
                 .map(Room::new);
     }
 
+    @Transactional(readOnly = true)
+    public Room findRoom(Long roomId, Integer hotelId) {
+        return new Room(roomRepository.findByIdAndHotelId(roomId, hotelId));
+    }
+
     private static BooleanBuilder createSearchPredicate(RoomType type, Boolean hasTv, Boolean hasBalcony, Boolean hasAirConditioner,
                                                         Boolean hasRubbishView, Boolean hasPoolView, Boolean hasSeaView,
                                                         Boolean hasFixedDateReservation) {

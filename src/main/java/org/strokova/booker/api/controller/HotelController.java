@@ -59,6 +59,7 @@ public class HotelController {
 
     @RequestMapping(value = "/{hotelId}", method = RequestMethod.GET)
     public ResponseEntity<Hotel> readHotel(@PathVariable Integer hotelId) {
+        // TODO: NPE when hotel with hotelId not found
         return new ResponseEntity<>(hotelService.findHotel(hotelId), HttpStatus.OK);
     }
 

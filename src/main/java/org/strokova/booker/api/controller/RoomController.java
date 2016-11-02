@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.strokova.booker.api.model.Room;
 import org.strokova.booker.api.model.RoomType;
-import org.strokova.booker.api.queryParameters.RoomQueryParameters;
 import org.strokova.booker.api.service.RoomService;
 
 import static org.strokova.booker.api.queryParameters.RoomQueryParameters.*;
@@ -63,5 +62,12 @@ public class RoomController {
                 .fromCurrentRequest().path("/{id}")
                 .buildAndExpand(room.getId()).toUri());
         return new ResponseEntity<>(room, httpHeaders, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "/{roomId}", method = RequestMethod.GET)
+    public ResponseEntity<Room> readRoom(
+            @PathVariable Long roomId,
+            @PathVariable Integer hotelId) {
+        return new ResponseEntity<>(roomService.findRoom(roomId, hotelId), HttpStatus.OK);
     }
 }
