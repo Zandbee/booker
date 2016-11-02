@@ -79,4 +79,12 @@ public class RoomController {
         roomService.deleteRoom(roomId, hotelId);
         return ResponseEntity.ok().build();
     }
+
+    @RequestMapping(value = "/{roomId}", method = RequestMethod.PUT)
+    public ResponseEntity<Room> updateRoom(
+            @PathVariable Long roomId,
+            @PathVariable Integer hotelId,
+            @RequestBody Room room) {
+        return new ResponseEntity<>(roomService.updateRoom(roomId, hotelId, room), HttpStatus.OK);
+    }
 }

@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.strokova.booker.api.entity.HotelEntity;
+import org.strokova.booker.api.entity.RoomEntity;
 import org.strokova.booker.api.entity.RoomEntityFactory;
 import org.strokova.booker.api.model.Room;
 import org.strokova.booker.api.model.RoomType;
@@ -59,6 +60,28 @@ public class RoomService {
     @Transactional
     public void deleteRoom(Long roomId, Integer hotelId) {
         roomRepository.deleteByIdAndHotelId(roomId, hotelId);
+    }
+
+    @Transactional
+    public Room updateRoom(Long roomId, Integer hotelId, Room room) {
+        Long newId = room.getId();
+        if (newId != null && newId.equals(roomId)) {
+            throw new IllegalArgumentException("Impossible to update room id");
+        }
+        RoomEntity oldRoomEntity = roomRepository.findByIdAndHotelId(roomId, hotelId);
+        return new Room(roomRepository.save(updateRoomData(oldRoomEntity, room)));
+    }
+
+    private static RoomEntity updateRoomData(RoomEntity roomEntity, Room data) {
+        return roomEntity
+                .setType(data.getType())
+                .setHasTv(data.isHasTv())
+                .setHasAirConditioner(data.isHasAirConditioner())
+                .setHasBalcony(data.isHasBalcony())
+                .setHasRubbishView(data.isHasRubbishView())
+                .setHasPoolView(data.isHasPoolView())
+                .setHasSeaView(data.isHasSeaView())
+                .setHasFixedDateReservation(data.isHasFixedDateReservation());
     }
 
     private static BooleanBuilder createSearchPredicate(RoomType type, Boolean hasTv, Boolean hasBalcony, Boolean hasAirConditioner,
