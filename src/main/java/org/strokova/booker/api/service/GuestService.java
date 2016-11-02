@@ -45,6 +45,11 @@ public class GuestService {
         return new Guest(guestRepository.findOne(guestId));
     }
 
+    @Transactional
+    public void deleteGuest(Long guestId) {
+        guestRepository.delete(guestId);
+    }
+
     private static BooleanBuilder createSearchPredicate(String name, String phone) {
         BooleanBuilder predicate = new BooleanBuilder();
         if (name != null && !name.trim().isEmpty()) {

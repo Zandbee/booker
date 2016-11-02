@@ -53,6 +53,12 @@ public class GuestController {
 
     @RequestMapping(value = "/{guestId}", method = RequestMethod.GET)
     public ResponseEntity<Guest> readGuest(@PathVariable Long guestId) {
-        return new ResponseEntity<Guest>(guestService.readGuest(guestId), HttpStatus.OK);
+        return new ResponseEntity<>(guestService.readGuest(guestId), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{guestId}", method = RequestMethod.DELETE)
+    public ResponseEntity deleteGuest(@PathVariable Long guestId) {
+        guestService.deleteGuest(guestId);
+        return ResponseEntity.ok().build();
     }
 }
