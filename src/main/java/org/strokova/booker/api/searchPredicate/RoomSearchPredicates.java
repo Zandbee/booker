@@ -41,6 +41,4 @@ public final class RoomSearchPredicates {
     public static BooleanExpression hasFixedDateReservation(Boolean value) {
         return QRoomEntity.roomEntity.hasFixedDateReservation.eq(value);
     }
-
-    // TODO: something for hotel, reservations
 }

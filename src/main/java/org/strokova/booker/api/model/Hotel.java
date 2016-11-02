@@ -14,6 +14,9 @@ public class Hotel {
     private boolean hasPool = false;
     private boolean hasWaterpark = false;
     private boolean hasTennisCourt = false;
+    // TODO: on update, if boolean values are not provided, all turn to false (default is applied)
+
+    public Hotel() {}
 
     public Hotel(Integer id, String name, boolean hasPool, boolean hasWaterpark, boolean hasTennisCourt) {
         this.id = id;
