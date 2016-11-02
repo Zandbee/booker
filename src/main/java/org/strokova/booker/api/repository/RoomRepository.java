@@ -4,12 +4,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.strokova.booker.api.entity.HotelEntity;
+import org.strokova.booker.api.entity.RoomEntity;
 
 /**
- * 28.10.2016.
+ * 02.11.2016.
  */
 @Repository
 @Transactional(readOnly = true)
-public interface HotelRepository extends JpaRepository<HotelEntity, Integer>, QueryDslPredicateExecutor<HotelEntity> {
+public interface RoomRepository extends JpaRepository<RoomEntity, Long>, QueryDslPredicateExecutor<RoomEntity> {
 }

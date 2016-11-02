@@ -2,6 +2,7 @@ package org.strokova.booker.api.searchPredicate;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.strokova.booker.api.entity.QRoomEntity;
+import org.strokova.booker.api.model.RoomType;
 
 /**
  * 31.10.2016.
@@ -9,7 +10,9 @@ import org.strokova.booker.api.entity.QRoomEntity;
 public final class RoomSearchPredicates {
     private RoomSearchPredicates() {}
 
-    //public static BooleanExpression typeIs()
+    public static BooleanExpression typeIs(RoomType value) {
+        return QRoomEntity.roomEntity.type.eq(value);
+    }
 
     public static BooleanExpression hasTv(Boolean value) {
         return QRoomEntity.roomEntity.hasTv.eq(value);

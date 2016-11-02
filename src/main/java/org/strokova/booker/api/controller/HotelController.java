@@ -8,12 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.strokova.booker.api.model.Hotel;
-import org.strokova.booker.api.queryParameters.HotelParameter;
-import org.strokova.booker.api.queryParameters.HotelQueryParameters;
 import org.strokova.booker.api.service.HotelService;
-
-import java.util.Collection;
-import java.util.Map;
 
 import static org.strokova.booker.api.queryParameters.HotelQueryParameters.*;
 
@@ -38,22 +33,14 @@ public class HotelController {
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Page<Hotel>> readHotels(
-            @RequestParam(value = "page", defaultValue = DEFAULT_PAGE_NUMBER, required = false)
-                    Integer page,
-            @RequestParam(value = "size", defaultValue = DEFAULT_PAGE_SIZE, required = false)
-                    Integer size,
-            @RequestParam(value = "order", defaultValue = DEFAULT_SORT_ORDER, required = false)
-                    String order,
-            @RequestParam(value = "by", defaultValue = HOTEL_QUERY_PARAM_ID, required = false)
-                    String by,
-            @RequestParam(value = HOTEL_QUERY_PARAM_NAME, required = false)
-                    String name,
-            @RequestParam(value = HOTEL_QUERY_PARAM_HAS_POOL, required = false)
-                    Boolean hasPool,
-            @RequestParam(value = HOTEL_QUERY_PARAM_HAS_WATERPARK, required = false)
-                    Boolean hasWaterpark,
-            @RequestParam(value = HOTEL_QUERY_PARAM_HAS_TENNIS_COURT, required = false)
-                    Boolean hasTennisCourt
+            @RequestParam(value = "page", defaultValue = DEFAULT_PAGE_NUMBER, required = false) Integer page,
+            @RequestParam(value = "size", defaultValue = DEFAULT_PAGE_SIZE, required = false) Integer size,
+            @RequestParam(value = "order", defaultValue = DEFAULT_SORT_ORDER, required = false) String order,
+            @RequestParam(value = "by", defaultValue = HOTEL_QUERY_PARAM_ID, required = false) String by,
+            @RequestParam(value = HOTEL_QUERY_PARAM_NAME, required = false) String name,
+            @RequestParam(value = HOTEL_QUERY_PARAM_HAS_POOL, required = false) Boolean hasPool,
+            @RequestParam(value = HOTEL_QUERY_PARAM_HAS_WATERPARK, required = false) Boolean hasWaterpark,
+            @RequestParam(value = HOTEL_QUERY_PARAM_HAS_TENNIS_COURT, required = false) Boolean hasTennisCourt
     ) {
         return new ResponseEntity<>(
                 hotelService.findHotels(page, size, order, by, name, hasPool, hasWaterpark, hasTennisCourt),

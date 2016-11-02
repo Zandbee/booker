@@ -29,7 +29,7 @@ public class HotelService {
         this.hotelRepository = hotelRepository;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public Hotel saveHotel(Hotel hotel) {
         return new Hotel(hotelRepository.save(HotelEntityFactory.create(hotel)));
     }

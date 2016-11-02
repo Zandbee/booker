@@ -18,6 +18,8 @@ public class Room {
     private boolean hasSeaView = false;
     private boolean hasFixedDateReservation = false;
 
+    public Room() {}
+
     public Room(Long id, RoomType type, boolean hasTv, boolean hasBalcony, boolean hasAirConditioner, boolean hasRubbishView, boolean hasPoolView, boolean hasSeaView, boolean hasFixedDateReservation) {
         this.id = id;
         this.type = type;

@@ -8,9 +8,8 @@ import org.strokova.booker.api.model.Room;
 public final class RoomEntityFactory {
     private RoomEntityFactory() {}
 
-    public static RoomEntity create(Room room) {
+    public static RoomEntity create(Room room, HotelEntity hotelEntity) {
         return new RoomEntity()
-                .setId(room.getId())
                 .setType(room.getType())
                 .setHasTv(room.isHasTv())
                 .setHasBalcony(room.isHasBalcony())
@@ -18,6 +17,7 @@ public final class RoomEntityFactory {
                 .setHasRubbishView(room.isHasRubbishView())
                 .setHasPoolView(room.isHasPoolView())
                 .setHasSeaView(room.isHasSeaView())
-                .setHasFixedDateReservation(room.isHasFixedDateReservation());
+                .setHasFixedDateReservation(room.isHasFixedDateReservation())
+                .setHotel(hotelEntity);
     }
 }

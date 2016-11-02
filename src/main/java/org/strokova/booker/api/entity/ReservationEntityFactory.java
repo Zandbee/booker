@@ -8,12 +8,12 @@ import org.strokova.booker.api.model.Reservation;
 public final class ReservationEntityFactory {
     private ReservationEntityFactory() {}
 
-    public static ReservationEntity create(Reservation reservation) {
+    /*public static ReservationEntity create(Reservation reservation) {
         return new ReservationEntity()
                 .setId(reservation.getId())
                 .setDateFrom(reservation.getDateFrom())
                 .setDateTo(reservation.getDateTo())
                 .setGuest(GuestEntityFactory.create(reservation.getGuest()))
                 .setRoom(RoomEntityFactory.create(reservation.getRoom()));
-    }
+    }*/
 }
