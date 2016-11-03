@@ -33,6 +33,7 @@ public class RoomController {
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Page<Room>> readRooms(
+            @PathVariable Integer hotelId,
             @RequestParam(value = "page", defaultValue = DEFAULT_PAGE_NUMBER, required = false) Integer page,
             @RequestParam(value = "size", defaultValue = DEFAULT_PAGE_SIZE, required = false) Integer size,
             @RequestParam(value = "order", defaultValue = DEFAULT_SORT_ORDER, required = false) String order,
@@ -46,7 +47,7 @@ public class RoomController {
             @RequestParam(value = ROOM_QUERY_PARAM_HAS_SEA_VIEW, required = false) Boolean hasSeaView,
             @RequestParam(value = ROOM_QUERY_PARAM_HAS_FIXED_DATE_RESERVATION, required = false) Boolean hasFixedDateReservation) {
         return new ResponseEntity<>(
-                roomService.findRooms(page, size, order, by,
+                roomService.findRooms(hotelId, page, size, order, by,
                         type, hasTv, hasBalcony, hasAirConditioner,
                         hasRubbishView, hasPoolView, hasSeaView, hasFixedDateReservation),
                 HttpStatus.OK);

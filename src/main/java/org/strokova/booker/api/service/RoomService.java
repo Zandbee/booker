@@ -43,11 +43,14 @@ public class RoomService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Room> findRooms(Integer page, Integer size, String order, String by,
+    public Page<Room> findRooms(Integer hotelId, Integer page, Integer size, String order, String by,
                                 RoomType type, Boolean hasTv, Boolean hasBalcony, Boolean hasAirConditioner, Boolean hasRubbishView,
                                 Boolean hasPoolView, Boolean hasSeaView, Boolean hasFixedDateReservation) {
+        if (hotelRepository.findOne(hotelId) == null) {
+            throw new IllegalArgumentException("Cannot find hotel with id = " + hotelId);
+        }
         return roomRepository.findAll(
-                createSearchPredicate(type, hasTv, hasBalcony, hasAirConditioner, hasRubbishView, hasPoolView, hasSeaView, hasFixedDateReservation),
+                createSearchPredicate(hotelId, type, hasTv, hasBalcony, hasAirConditioner, hasRubbishView, hasPoolView, hasSeaView, hasFixedDateReservation),
                 createPageRequest(page, size, order, by))
                 .map(Room::new);
     }
@@ -84,10 +87,15 @@ public class RoomService {
                 .setHasFixedDateReservation(data.isHasFixedDateReservation());
     }
 
-    private static BooleanBuilder createSearchPredicate(RoomType type, Boolean hasTv, Boolean hasBalcony, Boolean hasAirConditioner,
+    private static BooleanBuilder createSearchPredicate(Integer hotelId, RoomType type, Boolean hasTv, Boolean hasBalcony, Boolean hasAirConditioner,
                                                         Boolean hasRubbishView, Boolean hasPoolView, Boolean hasSeaView,
                                                         Boolean hasFixedDateReservation) {
+        if (hotelId == null) {
+            throw new IllegalArgumentException("HotelId must not be empty");
+        }
+
         BooleanBuilder predicate = new BooleanBuilder();
+        predicate.and(hotelIs(hotelId));
         if (type != null) {
             predicate.and(typeIs(type));
         }

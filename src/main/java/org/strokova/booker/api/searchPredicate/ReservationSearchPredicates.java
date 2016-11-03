@@ -15,15 +15,15 @@ public final class ReservationSearchPredicates {
         return QReservationEntity.reservationEntity.dateFrom.eq(value);
     }
 
-    public static BooleanExpression dateFromIsBefore(Date value) {
-        return QReservationEntity.reservationEntity.dateFrom.before(value);
+    public static BooleanExpression dateFromLoe(Date value) {
+        return QReservationEntity.reservationEntity.dateFrom.loe(value);
     }
 
-    public static BooleanExpression dateFromIsAfter(Date value) {
-        return QReservationEntity.reservationEntity.dateFrom.after(value);
+    public static BooleanExpression dateFromGoe(Date value) {
+        return QReservationEntity.reservationEntity.dateFrom.goe(value);
     }
 
-    public static BooleanExpression dateFromIsAfter(Date valueFrom, Date valueTo) {
+    public static BooleanExpression dateFromIsBetween(Date valueFrom, Date valueTo) {
         return QReservationEntity.reservationEntity.dateFrom.between(valueFrom, valueTo);
     }
 
@@ -31,17 +31,23 @@ public final class ReservationSearchPredicates {
         return QReservationEntity.reservationEntity.dateTo.eq(value);
     }
 
-    public static BooleanExpression dateToIsBefore(Date value) {
-        return QReservationEntity.reservationEntity.dateTo.before(value);
+    public static BooleanExpression dateToLoe(Date value) {
+        return QReservationEntity.reservationEntity.dateTo.loe(value);
     }
 
-    public static BooleanExpression dateToIsAfter(Date value) {
-        return QReservationEntity.reservationEntity.dateTo.after(value);
+    public static BooleanExpression dateToGoe(Date value) {
+        return QReservationEntity.reservationEntity.dateTo.goe(value);
     }
 
-    public static BooleanExpression dateToIsAfter(Date valueFrom, Date valueTo) {
+    public static BooleanExpression dateToIsBetween(Date valueFrom, Date valueTo) {
         return QReservationEntity.reservationEntity.dateTo.between(valueFrom, valueTo);
     }
 
-    // TODO: something for guest, room
+    public static BooleanExpression roomIs(Long roomId) {
+        return QReservationEntity.reservationEntity.room.id.eq(roomId);
+    }
+
+    public static BooleanExpression guestIs(Long guestId) {
+        return QReservationEntity.reservationEntity.guest.id.eq(guestId);
+    }
 }

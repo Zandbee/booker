@@ -41,4 +41,8 @@ public final class RoomSearchPredicates {
     public static BooleanExpression hasFixedDateReservation(Boolean value) {
         return QRoomEntity.roomEntity.hasFixedDateReservation.eq(value);
     }
+
+    public static BooleanExpression hotelIs(Integer hotelId) {
+        return QRoomEntity.roomEntity.hotel.id.eq(hotelId);
+    }
 }
