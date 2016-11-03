@@ -16,7 +16,7 @@ public enum RoomParameter {
     HAS_SEA_VIEW("hasSeaView" , ROOM_QUERY_PARAM_HAS_SEA_VIEW),
     HAS_FIXED_DATE_RESERVATION("hasFixedDateReservation", ROOM_QUERY_PARAM_HAS_FIXED_DATE_RESERVATION);
 
-    // exact column name in database
+    // exact field name in class, corresponding to column in db
     private String columnName;
     // for clients to use in their sorting requests as parameter value and
     // query strings as parameter name

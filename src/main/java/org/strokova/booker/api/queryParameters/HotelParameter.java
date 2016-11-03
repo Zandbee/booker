@@ -12,7 +12,7 @@ public enum HotelParameter {
     HAS_WATERPARK("hasWaterpark", HOTEL_QUERY_PARAM_HAS_WATERPARK),
     HAS_TENNIS_COURT("hasTennisCourt", HOTEL_QUERY_PARAM_HAS_TENNIS_COURT);
 
-    // exact column name in database
+    // exact field name in class, corresponding to column in db
     private String columnName;
     // for clients to use in their sorting requests as parameter value and
     // query strings as parameter name

@@ -20,7 +20,7 @@ public class Room {
 
     public Room() {}
 
-    public Room(Long id, RoomType type, boolean hasTv, boolean hasBalcony, boolean hasAirConditioner, boolean hasRubbishView, boolean hasPoolView, boolean hasSeaView, boolean hasFixedDateReservation) {
+    /*public Room(Long id, RoomType type, boolean hasTv, boolean hasBalcony, boolean hasAirConditioner, boolean hasRubbishView, boolean hasPoolView, boolean hasSeaView, boolean hasFixedDateReservation) {
         this.id = id;
         this.type = type;
         this.hasTv = hasTv;
@@ -30,7 +30,7 @@ public class Room {
         this.hasPoolView = hasPoolView;
         this.hasSeaView = hasSeaView;
         this.hasFixedDateReservation = hasFixedDateReservation;
-    }
+    }*/
 
     public Room (RoomEntity roomEntity) {
         this.id = roomEntity.getId();

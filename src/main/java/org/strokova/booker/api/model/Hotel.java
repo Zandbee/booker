@@ -18,13 +18,13 @@ public class Hotel {
 
     public Hotel() {}
 
-    public Hotel(Integer id, String name, boolean hasPool, boolean hasWaterpark, boolean hasTennisCourt) {
+    /*public Hotel(Integer id, String name, boolean hasPool, boolean hasWaterpark, boolean hasTennisCourt) {
         this.id = id;
         this.name = name;
         this.hasPool = hasPool;
         this.hasWaterpark = hasWaterpark;
         this.hasTennisCourt = hasTennisCourt;
-    }
+    }*/
 
     public Hotel (HotelEntity hotelEntity) {
         this.id = hotelEntity.getId();
