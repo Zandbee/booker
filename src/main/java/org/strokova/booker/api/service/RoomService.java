@@ -71,6 +71,7 @@ public class RoomService {
         if (newId != null && newId.equals(roomId)) {
             throw new IllegalArgumentException("Impossible to update room id");
         }
+        // TODO: need to check the room exists?
         RoomEntity oldRoomEntity = roomRepository.findByIdAndHotelId(roomId, hotelId);
         return new Room(roomRepository.save(updateRoomData(oldRoomEntity, newRoomData)));
     }

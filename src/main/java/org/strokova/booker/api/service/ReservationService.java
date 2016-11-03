@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.strokova.booker.api.entity.GuestEntity;
+import org.strokova.booker.api.entity.ReservationEntity;
 import org.strokova.booker.api.entity.ReservationEntityFactory;
 import org.strokova.booker.api.entity.RoomEntity;
 import org.strokova.booker.api.model.GuestReservation;
@@ -16,7 +17,6 @@ import org.strokova.booker.api.queryParameters.ReservationParameter;
 import org.strokova.booker.api.repository.GuestRepository;
 import org.strokova.booker.api.repository.ReservationRepository;
 import org.strokova.booker.api.repository.RoomRepository;
-import org.strokova.booker.api.searchPredicate.ReservationSearchPredicates;
 
 import java.util.Date;
 
@@ -41,10 +41,9 @@ public class ReservationService {
 
     @Transactional
     public Reservation save(GuestReservation guestReservation, Integer hotelId, Long roomId) {
+        checkIfRoomExists(hotelId, roomId);
+
         RoomEntity roomEntity = roomRepository.findByIdAndHotelId(roomId, hotelId);
-        if (roomEntity == null) {
-            throw new IllegalArgumentException("Cannot find room with roomId = " + roomId + " and hotelId = " + hotelId);
-        }
 
         Long guestId = guestReservation.getGuestId();
         GuestEntity guestEntity = guestRepository.findOne(guestId);
@@ -66,9 +65,7 @@ public class ReservationService {
     public Page<Reservation> findReservations(Integer hotelId, Long roomId,
                                               Integer page, Integer size, String order, String by,
                                               Date dateFrom, Date dateTo, Long guestId) {
-        if (roomRepository.findByIdAndHotelId(roomId, hotelId) == null) {
-            throw new IllegalArgumentException("Cannot find room with roomId = " + roomId + " and hotelId = " + hotelId);
-        }
+        checkIfRoomExists(hotelId, roomId);
 
         return reservationRepository.findAll(
                 createSearchPredicate(roomId, dateFrom, dateTo, guestId),
@@ -76,7 +73,60 @@ public class ReservationService {
                 .map(Reservation::new);
     }
 
-    private BooleanBuilder createSearchPredicate(Long roomId, Date dateFrom, Date dateTo, Long guestId) {
+    @Transactional(readOnly = true)
+    public Reservation findReservation(Integer hotelId, Long roomId, Long reservationId) {
+        if (roomRepository.findByIdAndHotelId(roomId, hotelId) == null) {
+            throw new IllegalArgumentException("Cannot find room with roomId = " + roomId + " and hotelId = " + hotelId);
+        }
+
+        return new Reservation(reservationRepository.findByIdAndRoomId(reservationId, roomId));
+    }
+
+    @Transactional
+    public void deleteReservation(Integer hotelId, Long roomId, Long reservationId) {
+        checkIfRoomExists(hotelId, roomId);
+        reservationRepository.deleteByIdAndRoomId(reservationId, roomId);
+    }
+
+    @Transactional
+    public Reservation updateReservation(Integer hotelId, Long roomId, Long reservationId, Reservation newReservationData) {
+        Long newId = newReservationData.getId();
+        if (newId != null && !newId.equals(reservationId)) {
+            throw new IllegalArgumentException("Impossible to update reservation id");
+        }
+
+        checkIfRoomExists(hotelId, roomId);
+
+        ReservationEntity oldReservationEntity = reservationRepository.findByIdAndRoomId(reservationId, roomId);
+        if (oldReservationEntity == null) {
+            throw new IllegalArgumentException("Cannot find reservation with id = " + reservationId + " for roomId = " + roomId);
+        }
+
+        return new Reservation(reservationRepository.save(updateReservationData(oldReservationEntity, newReservationData)));
+    }
+
+    @Transactional(readOnly = true)
+    private void checkIfRoomExists(Integer hotelId, Long roomId) {
+        if (roomRepository.findByIdAndHotelId(roomId, hotelId) == null) {
+            throw new IllegalArgumentException("Cannot find room with roomId = " + roomId + " and hotelId = " + hotelId);
+        }
+    }
+
+    private static ReservationEntity updateReservationData(ReservationEntity reservationEntity, Reservation data) {
+        Date newDateFrom = data.getDateFrom();
+        Date newDateTo = data.getDateTo();
+
+        if (newDateFrom != null) {
+            reservationEntity.setDateFrom(newDateFrom);
+        }
+        if (newDateTo != null) {
+            reservationEntity.setDateTo(newDateTo);
+        }
+
+        return reservationEntity;
+    }
+
+    private static BooleanBuilder createSearchPredicate(Long roomId, Date dateFrom, Date dateTo, Long guestId) {
         if (roomId == null) {
             throw new IllegalArgumentException("RoomId must not be null");
         }
@@ -102,7 +152,7 @@ public class ReservationService {
         return predicate;
     }
 
-    private PageRequest createPageRequest(Integer page, Integer size, String order, String by) {
+    private static PageRequest createPageRequest(Integer page, Integer size, String order, String by) {
         return new PageRequest(page, size, ServiceUtils.determineSortDirection(order), determineSortProperty(by));
     }
 

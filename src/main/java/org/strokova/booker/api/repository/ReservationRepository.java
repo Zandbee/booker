@@ -12,4 +12,9 @@ import org.strokova.booker.api.entity.ReservationEntity;
 @Repository
 @Transactional(readOnly = true)
 public interface ReservationRepository extends JpaRepository<ReservationEntity, Long>, QueryDslPredicateExecutor<ReservationEntity> {
+
+    // could find/delete only by reservationId, but then it is not checked that the reservation belongs exactly to this room
+    ReservationEntity findByIdAndRoomId(Long reservationId, Long roomId);
+
+    void deleteByIdAndRoomId(Long reservationId, Long roomId);
 }

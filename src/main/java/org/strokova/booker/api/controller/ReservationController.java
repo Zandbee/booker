@@ -61,4 +61,32 @@ public class ReservationController {
                 .buildAndExpand(reservation.getId()).toUri());
         return new ResponseEntity<>(reservation, httpHeaders, HttpStatus.CREATED);
     }
+
+    @RequestMapping(value = "/{reservationId}", method = RequestMethod.GET)
+    public ResponseEntity<Reservation> readReservation(
+            @PathVariable Integer hotelId,
+            @PathVariable Long roomId,
+            @PathVariable Long reservationId) {
+        return new ResponseEntity<>(reservationService.findReservation(hotelId, roomId, reservationId), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{reservationId}", method = RequestMethod.DELETE)
+    public ResponseEntity deleteReservation(
+            @PathVariable Integer hotelId,
+            @PathVariable Long roomId,
+            @PathVariable Long reservationId) {
+        reservationService.deleteReservation(hotelId, roomId, reservationId);
+        return ResponseEntity.ok().build();
+    }
+
+    @RequestMapping(value = "/{reservationId}", method = RequestMethod.PUT)
+    public ResponseEntity<Reservation> updateReservation(
+            @PathVariable Integer hotelId,
+            @PathVariable Long roomId,
+            @PathVariable Long reservationId,
+            @RequestBody Reservation input) {
+        return new ResponseEntity<>(
+                reservationService.updateReservation(hotelId, roomId, reservationId, input),
+                HttpStatus.OK);
+    }
 }

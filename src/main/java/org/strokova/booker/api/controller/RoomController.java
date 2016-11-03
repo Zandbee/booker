@@ -75,8 +75,7 @@ public class RoomController {
     @RequestMapping(value = "/{roomId}", method = RequestMethod.DELETE)
     public ResponseEntity deleteRoom(
             @PathVariable Long roomId,
-            @PathVariable Integer hotelId
-    ) {
+            @PathVariable Integer hotelId) {
         roomService.deleteRoom(roomId, hotelId);
         return ResponseEntity.ok().build();
     }
