@@ -13,6 +13,7 @@ public class ReservationEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // TODO: must be not empty?
     private Date dateFrom;
     private Date dateTo;
 

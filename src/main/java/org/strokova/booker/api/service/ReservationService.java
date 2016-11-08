@@ -19,6 +19,7 @@ import org.strokova.booker.api.repository.ReservationRepository;
 import org.strokova.booker.api.repository.RoomRepository;
 
 import java.util.Date;
+import java.util.List;
 
 import static org.strokova.booker.api.searchPredicate.ReservationSearchPredicates.*;
 
@@ -43,7 +44,17 @@ public class ReservationService {
     public Reservation save(GuestReservation guestReservation, Integer hotelId, Long roomId) {
         checkIfRoomExists(hotelId, roomId);
 
+        Reservation reservation = guestReservation.getReservation();
+        Date dateFrom = reservation.getDateFrom();
+        Date dateTo = reservation.getDateTo();
+        if (dateFrom == null || dateTo == null) {
+            throw new IllegalArgumentException("Reservation dates cannot be empty");
+        }
+
         RoomEntity roomEntity = roomRepository.findByIdAndHotelId(roomId, hotelId);
+
+        // check if this room is free for these dates
+        checkIfRoomIsEmpty(roomEntity, dateFrom, dateTo);
 
         Long guestId = guestReservation.getGuestId();
         GuestEntity guestEntity = guestRepository.findOne(guestId);
@@ -51,11 +62,6 @@ public class ReservationService {
             throw new IllegalArgumentException("Cannot find guest with id = " + guestId);
         }
 
-        Reservation reservation = guestReservation.getReservation();
-        if (reservation.getDateFrom() == null || reservation.getDateTo() == null) {
-            throw new IllegalArgumentException("Reservation dates cannot be empty");
-        }
-        // TODO: check if this room is free for these dates
         // TODO: fixed reservations!
 
         return new Reservation(reservationRepository.save(ReservationEntityFactory.create(reservation, guestEntity, roomEntity)));
@@ -102,6 +108,7 @@ public class ReservationService {
             throw new IllegalArgumentException("Cannot find reservation with id = " + reservationId + " for roomId = " + roomId);
         }
 
+        // TODO: check if the dates do not intersect with other reservations for this eoom, except this reservationId
         return new Reservation(reservationRepository.save(updateReservationData(oldReservationEntity, newReservationData)));
     }
 
@@ -109,6 +116,15 @@ public class ReservationService {
     private void checkIfRoomExists(Integer hotelId, Long roomId) {
         if (roomRepository.findByIdAndHotelId(roomId, hotelId) == null) {
             throw new IllegalArgumentException("Cannot find room with roomId = " + roomId + " and hotelId = " + hotelId);
+        }
+    }
+
+    // TODO: return bool?
+    @Transactional(readOnly = true)
+    private void checkIfRoomIsEmpty(RoomEntity room, Date dateFrom, Date dateTo) {
+        List<ReservationEntity> existingReservations = reservationRepository.findDatesIntersection(room, dateFrom, dateTo);
+        if (!existingReservations.isEmpty()) {
+            throw new IllegalArgumentException("This room is already booked for these dates");
         }
     }
 
