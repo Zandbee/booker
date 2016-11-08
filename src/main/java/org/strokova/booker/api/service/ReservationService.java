@@ -108,7 +108,11 @@ public class ReservationService {
             throw new IllegalArgumentException("Cannot find reservation with id = " + reservationId + " for roomId = " + roomId);
         }
 
-        // TODO: check if the dates do not intersect with other reservations for this eoom, except this reservationId
+        // check if the dates do not intersect with other reservations for this room, except this reservationId
+        // TODO: уже проверяли, что комната существует, а тут опять ее запрашиваем - криво
+        RoomEntity roomEntity = roomRepository.findByIdAndHotelId(roomId, hotelId);
+        checkIfRoomIsEmptyExceptThisReservation(roomEntity, oldReservationEntity, newReservationData);
+
         return new Reservation(reservationRepository.save(updateReservationData(oldReservationEntity, newReservationData)));
     }
 
@@ -123,6 +127,29 @@ public class ReservationService {
     @Transactional(readOnly = true)
     private void checkIfRoomIsEmpty(RoomEntity room, Date dateFrom, Date dateTo) {
         List<ReservationEntity> existingReservations = reservationRepository.findDatesIntersection(room, dateFrom, dateTo);
+        if (!existingReservations.isEmpty()) {
+            throw new IllegalArgumentException("This room is already booked for these dates");
+        }
+    }
+
+    // TODO: return bool?
+    @Transactional(readOnly = true)
+    private void checkIfRoomIsEmptyExceptThisReservation(
+            RoomEntity room, ReservationEntity existingReservationEntity, Reservation newReservationData) {
+        Long reservationId = existingReservationEntity.getId();
+
+        Date newDateFrom = newReservationData.getDateFrom();
+        Date newDateTo = newReservationData.getDateTo();
+
+        if (newDateFrom == null) {
+            newDateFrom = existingReservationEntity.getDateFrom();
+        }
+        if (newDateTo == null) {
+            newDateTo = existingReservationEntity.getDateTo();
+        }
+
+        List<ReservationEntity> existingReservations = reservationRepository
+                .findDatesIntersectionExceptThisReservation(room, newDateFrom, newDateTo, reservationId);
         if (!existingReservations.isEmpty()) {
             throw new IllegalArgumentException("This room is already booked for these dates");
         }

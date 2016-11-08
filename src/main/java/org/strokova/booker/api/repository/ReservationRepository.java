@@ -30,4 +30,14 @@ public interface ReservationRepository extends JpaRepository<ReservationEntity, 
             "OR r.dateTo BETWEEN ?2 AND ?3 " +
             "OR ?2 BETWEEN r.dateFrom AND r.dateTo)")
     List<ReservationEntity> findDatesIntersection(RoomEntity room, Date dateFrom, Date dateTo);
+
+    @Transactional(readOnly = true)
+    @Query("SELECT r FROM ReservationEntity r " +
+            "WHERE r.id <> ?4 " +
+            "AND r.room = ?1 " +
+            "AND (r.dateFrom BETWEEN ?2 AND ?3 " +
+            "OR r.dateTo BETWEEN ?2 AND ?3 " +
+            "OR ?2 BETWEEN r.dateFrom AND r.dateTo)")
+    List<ReservationEntity> findDatesIntersectionExceptThisReservation(
+            RoomEntity room, Date dateFrom, Date dateTo, Long reservationId);
 }
