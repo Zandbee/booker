@@ -23,6 +23,7 @@ public interface ReservationRepository extends JpaRepository<ReservationEntity, 
     void deleteByIdAndRoomId(Long reservationId, Long roomId);
 
     // TODO: how to name this method?
+    // TODO: actually need to use > and < instead of between (cannot book till 31.12 if it is already booked from 31.12, but can do vise versa)
     @Transactional(readOnly = true)
     @Query("SELECT r FROM ReservationEntity r " +
             "WHERE r.room = ?1 " +
