@@ -95,10 +95,13 @@ public class ReservationService {
     }
 
     @Transactional
-    public Reservation updateReservation(Integer hotelId, Long roomId, Long reservationId, Reservation newReservationData) {
-        Long newId = newReservationData.getId();
-        if (newId != null && !newId.equals(reservationId)) {
-            throw new IllegalArgumentException("Impossible to update reservation id");
+    public Reservation updateReservation(GuestReservation newReservationData, Integer hotelId, Long roomId, Long reservationId) {
+        Reservation newReservation = newReservationData.getReservation();
+        if (newReservation != null) {
+            Long newId = newReservation.getId();
+            if (newId != null && !newId.equals(reservationId)) {
+                throw new IllegalArgumentException("Impossible to update reservation id");
+            }
         }
 
         checkIfRoomExists(hotelId, roomId);
@@ -111,7 +114,7 @@ public class ReservationService {
         // check if the dates do not intersect with other reservations for this room, except this reservationId
         // TODO: уже проверяли, что комната существует, а тут опять ее запрашиваем - криво
         RoomEntity roomEntity = roomRepository.findByIdAndHotelId(roomId, hotelId);
-        checkIfRoomIsEmptyExceptThisReservation(roomEntity, oldReservationEntity, newReservationData);
+        checkIfRoomIsEmptyExceptThisReservation(roomEntity, oldReservationEntity, newReservation);
 
         return new Reservation(reservationRepository.save(updateReservationData(oldReservationEntity, newReservationData)));
     }
@@ -135,11 +138,15 @@ public class ReservationService {
     // TODO: return bool?
     @Transactional(readOnly = true)
     private void checkIfRoomIsEmptyExceptThisReservation(
-            RoomEntity room, ReservationEntity existingReservationEntity, Reservation newReservationData) {
+            RoomEntity room, ReservationEntity existingReservationEntity, Reservation newReservation) {
+        if (newReservation == null) {
+            return;
+        }
+
         Long reservationId = existingReservationEntity.getId();
 
-        Date newDateFrom = newReservationData.getDateFrom();
-        Date newDateTo = newReservationData.getDateTo();
+        Date newDateFrom = newReservation.getDateFrom();
+        Date newDateTo = newReservation.getDateTo();
 
         if (newDateFrom == null) {
             newDateFrom = existingReservationEntity.getDateFrom();
@@ -155,15 +162,22 @@ public class ReservationService {
         }
     }
 
-    private static ReservationEntity updateReservationData(ReservationEntity reservationEntity, Reservation data) {
-        Date newDateFrom = data.getDateFrom();
-        Date newDateTo = data.getDateTo();
-
-        if (newDateFrom != null) {
-            reservationEntity.setDateFrom(newDateFrom);
+    private ReservationEntity updateReservationData(ReservationEntity reservationEntity, GuestReservation data) {
+        Reservation newReservation = data.getReservation();
+        if (newReservation != null) {
+            Date newDateFrom = newReservation.getDateFrom();
+            Date newDateTo = newReservation.getDateTo();
+            if (newDateFrom != null) {
+                reservationEntity.setDateFrom(newDateFrom);
+            }
+            if (newDateTo != null) {
+                reservationEntity.setDateTo(newDateTo);
+            }
         }
-        if (newDateTo != null) {
-            reservationEntity.setDateTo(newDateTo);
+
+        Long newGuestId = data.getGuestId();
+        if (newGuestId != null) {
+            reservationEntity.setGuest(guestRepository.findOne(newGuestId));
         }
 
         return reservationEntity;

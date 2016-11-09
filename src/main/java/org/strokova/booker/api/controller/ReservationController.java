@@ -81,12 +81,12 @@ public class ReservationController {
 
     @RequestMapping(value = "/{reservationId}", method = RequestMethod.PUT)
     public ResponseEntity<Reservation> updateReservation(
+            @RequestBody GuestReservation input,
             @PathVariable Integer hotelId,
             @PathVariable Long roomId,
-            @PathVariable Long reservationId,
-            @RequestBody Reservation input) {
+            @PathVariable Long reservationId) {
         return new ResponseEntity<>(
-                reservationService.updateReservation(hotelId, roomId, reservationId, input),
+                reservationService.updateReservation(input, hotelId, roomId, reservationId),
                 HttpStatus.OK);
     }
 }
