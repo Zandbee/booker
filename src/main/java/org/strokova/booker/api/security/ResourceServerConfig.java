@@ -26,18 +26,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
-                .anonymous()
-                .disable()
-                .requestMatchers()
-                .antMatchers("/user/**") // TODO: fix this and below
+                .antMatcher("/**")
+                .authorizeRequests().anyRequest().authenticated()
                 .and()
-                .authorizeRequests()
-                .antMatchers("/user/**")
-                .access("hasRole('ADMIN')")
-                .and()
-                .exceptionHandling()
-                .accessDeniedHandler(new OAuth2AccessDeniedHandler());
+                .exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler());
     }
-
-    // http://websystique.com/spring-security/secure-spring-rest-api-using-oauth2/
 }
