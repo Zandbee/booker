@@ -29,8 +29,8 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
                 .withClient("clientId")
                 .secret("secret")
                 .resourceIds("booker_api")
-                .authorizedGrantTypes("client_credentials");
-                //.scopes("read", "write", "trust")
+                .authorizedGrantTypes("client_credentials")
+                .scopes("read", "write", "trust"); // TODO: too many?
     }
 
     @Override

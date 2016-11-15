@@ -16,27 +16,11 @@ import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHand
 @EnableWebSecurity
 public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    /*@Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .inMemoryAuthentication()
-                .withUser("john").password("123").roles("USER");
-    }
-
-    @Override
-    @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }*/
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 //.requiresChannel().and() // TODO: test if this works fine
-                /*.authorizeRequests()
-                .antMatchers("/oauth*//*/*").permitAll()
-                .anyRequest().authenticated()*/
-                .csrf().disable()
+                .csrf().disable() // TODO: need this?
                 .anonymous().disable()
                 .authorizeRequests()
                 .antMatchers("/oauth/token").permitAll()
