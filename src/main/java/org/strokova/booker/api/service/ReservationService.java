@@ -1,10 +1,12 @@
 package org.strokova.booker.api.service;
 
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.strokova.booker.api.entity.GuestEntity;
@@ -20,6 +22,7 @@ import org.strokova.booker.api.repository.RoomRepository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import static org.strokova.booker.api.searchPredicate.ReservationSearchPredicates.*;
 
@@ -28,6 +31,8 @@ import static org.strokova.booker.api.searchPredicate.ReservationSearchPredicate
  */
 @Service
 public class ReservationService {
+
+    private static final String OAUTH_SCOPE_TRUST = "trust"; // TODO: extract one string for all usages in the whole program
 
     private final ReservationRepository reservationRepository;
     private final RoomRepository roomRepository;
@@ -51,18 +56,25 @@ public class ReservationService {
             throw new IllegalArgumentException("Reservation dates cannot be empty");
         }
 
-        RoomEntity roomEntity = roomRepository.findByIdAndHotelId(roomId, hotelId);
-
-        // check if this room is free for these dates
-        checkIfRoomIsEmpty(roomEntity, dateFrom, dateTo);
-
         Long guestId = guestReservation.getGuestId();
-        GuestEntity guestEntity = guestRepository.findOne(guestId);
-        if (guestEntity == null) {
-            throw new IllegalArgumentException("Cannot find guest with id = " + guestId);
+        GuestEntity guestEntity;
+        // if guestId is null, a client with trust scope auth token may want to create a fixed-date reservation without a guest
+        if (guestId == null) {
+            if (isOAuthScope(OAUTH_SCOPE_TRUST)) {
+                guestEntity = null;
+            } else {
+                throw new IllegalArgumentException("Guest cannot be empty");
+            }
+        } else {
+            guestEntity = guestRepository.findOne(guestId);
+            if (guestEntity == null) {
+                throw new IllegalArgumentException("Cannot find guest with id = " + guestId);
+            }
         }
 
-        // TODO: fixed reservations!
+        RoomEntity roomEntity = roomRepository.findByIdAndHotelId(roomId, hotelId);
+        // check if this room is free for these dates
+        checkIfRoomIsEmpty(roomEntity, dateFrom, dateTo);
 
         return new Reservation(reservationRepository.save(ReservationEntityFactory.create(reservation, guestEntity, roomEntity)));
     }
@@ -227,5 +239,24 @@ public class ReservationService {
         }
 
         return sortProperty;
+    }
+
+    private static boolean isOAuthScope(String requiredScope) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        OAuth2Authentication oAuth2Authentication;
+
+        if (authentication instanceof OAuth2Authentication) {
+            oAuth2Authentication = (OAuth2Authentication) authentication;
+        } else {
+            throw new IllegalStateException("Unsupported Authentication! " + authentication);
+        }
+
+        Set<String> scopes = oAuth2Authentication.getOAuth2Request().getScope();
+        for (String scope : scopes) {
+            if (requiredScope.equals(scope)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
