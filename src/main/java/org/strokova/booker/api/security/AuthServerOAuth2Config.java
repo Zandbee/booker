@@ -10,12 +10,17 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 
+import static org.strokova.booker.api.security.OAuthScopes.*;
+
 /**
  * 14.11.2016.
  */
 @Configuration
 @EnableAuthorizationServer
 public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter {
+
+    private static final String GRANT_TYPE_CLIENT_CREDENTIALS = "client_credentials";
+    private static final String RESOURCE_ID = "booker_api";
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
@@ -26,11 +31,17 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
-                .withClient("clientId")
-                .secret("secret")
-                .resourceIds("booker_api")
-                .authorizedGrantTypes("client_credentials")
-                .scopes("read", "write", "trust"); // TODO: too many?
+                .withClient("admin_client")
+                .secret("admin_secret")
+                .resourceIds(RESOURCE_ID)
+                .authorizedGrantTypes(GRANT_TYPE_CLIENT_CREDENTIALS)
+                .scopes(READ.getName(), WRITE.getName(), TRUST.getName())
+                .and()
+                .withClient("user_client")
+                .secret("user_secret")
+                .resourceIds(RESOURCE_ID)
+                .authorizedGrantTypes(GRANT_TYPE_CLIENT_CREDENTIALS)
+                .scopes(READ.getName(), WRITE.getName());
     }
 
     @Override
