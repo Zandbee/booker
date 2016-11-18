@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.strokova.booker.api.model.Hotel;
+import org.strokova.booker.model.Hotel;
 import org.strokova.booker.api.service.HotelService;
 
 import static org.strokova.booker.api.queryParameters.HotelQueryParameters.*;

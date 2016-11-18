@@ -7,8 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.strokova.booker.api.model.GuestReservation;
-import org.strokova.booker.api.model.Reservation;
+import org.strokova.booker.model.GuestReservation;
+import org.strokova.booker.model.Reservation;
 import org.strokova.booker.api.service.ReservationService;
 
 import java.util.Date;
@@ -19,7 +19,7 @@ import static org.strokova.booker.api.queryParameters.ReservationQueryParameters
  * 03.11.2016.
  */
 @RestController
-@RequestMapping("/hotels/{hotelId}/rooms/{roomId}/reservations")
+@RequestMapping("/api/hotels/{hotelId}/rooms/{roomId}/reservations")
 public class ReservationController {
 
     private static final String DEFAULT_PAGE_SIZE = "25";

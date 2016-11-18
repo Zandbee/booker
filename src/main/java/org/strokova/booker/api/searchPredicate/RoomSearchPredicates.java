@@ -2,7 +2,7 @@ package org.strokova.booker.api.searchPredicate;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.strokova.booker.api.entity.QRoomEntity;
-import org.strokova.booker.api.model.RoomType;
+import org.strokova.booker.model.RoomType;
 
 /**
  * 31.10.2016.

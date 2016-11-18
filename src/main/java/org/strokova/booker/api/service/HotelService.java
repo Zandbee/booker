@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.strokova.booker.api.entity.HotelEntity;
 import org.strokova.booker.api.entity.HotelEntityFactory;
-import org.strokova.booker.api.model.Hotel;
+import org.strokova.booker.model.Hotel;
 import org.strokova.booker.api.queryParameters.HotelParameter;
 import org.strokova.booker.api.repository.HotelRepository;
 

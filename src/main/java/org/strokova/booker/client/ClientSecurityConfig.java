@@ -33,7 +33,7 @@ public class ClientSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .httpBasic()
                 .and()
-                .exceptionHandling().authenticationEntryPoint(entryPoint());
+                .exceptionHandling().authenticationEntryPoint(entryPoint()); // TODO: does not work :(
     }
 
     @Bean

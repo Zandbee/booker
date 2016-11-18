@@ -1,4 +1,4 @@
-package org.strokova.booker.api.model;
+package org.strokova.booker.model;
 
 /**
  * 28.10.2016.

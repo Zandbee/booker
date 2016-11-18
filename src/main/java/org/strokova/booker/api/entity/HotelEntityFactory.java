@@ -1,6 +1,6 @@
 package org.strokova.booker.api.entity;
 
-import org.strokova.booker.api.model.Hotel;
+import org.strokova.booker.model.Hotel;
 
 /**
  * author: Veronika, 10/30/2016.

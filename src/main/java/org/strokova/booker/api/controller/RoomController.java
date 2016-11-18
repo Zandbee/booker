@@ -7,8 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.strokova.booker.api.model.Room;
-import org.strokova.booker.api.model.RoomType;
+import org.strokova.booker.model.Room;
+import org.strokova.booker.model.RoomType;
 import org.strokova.booker.api.service.RoomService;
 
 import static org.strokova.booker.api.queryParameters.RoomQueryParameters.*;
@@ -17,7 +17,7 @@ import static org.strokova.booker.api.queryParameters.RoomQueryParameters.*;
  * 02.11.2016.
  */
 @RestController
-@RequestMapping("/hotels/{hotelId}/rooms")
+@RequestMapping("/api/hotels/{hotelId}/rooms")
 public class RoomController {
 
     private static final String DEFAULT_PAGE_SIZE = "25";
