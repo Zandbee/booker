@@ -24,7 +24,7 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
 public class ConfigWeb extends WebMvcConfigurerAdapter {
 
     private static final String ENCODING_UTF_8 = "UTF-8";
-    private static final String RESOURCE_PREFIX = "/WEB-INF/templates/";
+    private static final String RESOURCE_PREFIX = "/WEB-INF/";
     private static final String RESOURCE_SUFFIX = ".html";
 
     @Bean
@@ -35,14 +35,16 @@ public class ConfigWeb extends WebMvcConfigurerAdapter {
         return resolver;
     }
 
-    private TemplateEngine templateEngine() {
+    @Bean
+    public TemplateEngine templateEngine() {
         SpringTemplateEngine engine = new SpringTemplateEngine();
         engine.setEnableSpringELCompiler(true);
         engine.setTemplateResolver(templateResolver());
         return engine;
     }
 
-    private ITemplateResolver templateResolver() {
+    @Bean
+    public ITemplateResolver templateResolver() {
         SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
         resolver.setPrefix(RESOURCE_PREFIX);
         resolver.setSuffix(RESOURCE_SUFFIX);

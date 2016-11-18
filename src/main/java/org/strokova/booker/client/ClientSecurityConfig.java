@@ -27,7 +27,7 @@ public class ClientSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 //.requiresChannel().and() // TODO: test if this works fine
-                .antMatcher("/**").authorizeRequests().anyRequest().permitAll() // TODO: restrict!
+                .antMatcher("/client").authorizeRequests().anyRequest().permitAll() // TODO: restrict!
                 .and()
                 .antMatcher("/admin/**").authorizeRequests().anyRequest().authenticated()
                 .and()

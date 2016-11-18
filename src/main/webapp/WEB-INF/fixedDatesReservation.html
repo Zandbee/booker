@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <form th:action="@{/admin/reservations}" method="POST">
+                Hotel ID: <input id="hotelId" type="text"/>
+                Room ID: <input id="roomId" type="text"/>
+                From: <input id="dateFrom" type="text"/>
+                To: <input id="dateTo" type="text"/>
+                <input type="submit" value="Submit"/>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
