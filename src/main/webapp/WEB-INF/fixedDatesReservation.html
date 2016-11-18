@@ -8,7 +8,7 @@
 <body>
     <div class="container-fluid">
         <div class="row">
-            <form th:action="@{/admin/reservations}" method="POST">
+            <form th:action="@{/admin/reservations}" method="POST" enctype="application/json">
                 Hotel ID: <input id="hotelId" type="text"/>
                 Room ID: <input id="roomId" type="text"/>
                 From: <input id="dateFrom" type="text"/>
