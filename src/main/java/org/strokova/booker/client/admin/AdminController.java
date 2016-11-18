@@ -3,6 +3,7 @@ package org.strokova.booker.client.admin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.client.OAuth2RestOperations;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/admin/hotels")
+@EnableOAuth2Client
 public class AdminController {
 
     @Value("${oauth.resource}")
@@ -26,6 +28,7 @@ public class AdminController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String hotels() {
-        return restTemplate.getForObject(baseUrl + "/hotels", String.class);
+        System.out.println(restTemplate.getAccessToken());
+        return restTemplate.getForObject(baseUrl + "/api/hotels", String.class);
     }
 }

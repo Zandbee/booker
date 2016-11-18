@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestOperations;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
@@ -23,7 +24,6 @@ import static org.strokova.booker.api.security.OAuthScopes.*;
  */
 @Configuration
 @EnableOAuth2Client
-@RestController
 public class AdminClient {
 
     private static final String GRANT_TYPE_CLIENT_CREDENTIALS = "client_credentials";
@@ -35,19 +35,17 @@ public class AdminClient {
     private String oAuthTokenUrl;
 
     @Bean
-    public OAuth2RestOperations restTemplate(OAuth2ClientContext oauth2ClientContext) {
-        return new OAuth2RestTemplate(resource(), oauth2ClientContext);
-    }
+    public OAuth2RestOperations restTemplate() {
+        ClientCredentialsResourceDetails details = new ClientCredentialsResourceDetails();
+        //details.setUserAuthorizationUri(oAuthAuthorizeUrl);
+        details.setClientId("admin_client");
+        details.setClientSecret("admin_secret");
+        details.setAccessTokenUri(oAuthTokenUrl);
+        details.setGrantType(GRANT_TYPE_CLIENT_CREDENTIALS);
+        details.setScope(Arrays.asList(TRUST.getName()));
 
-    private OAuth2ProtectedResourceDetails resource() {
-        ClientCredentialsResourceDetails resource = new ClientCredentialsResourceDetails();
-        resource.setAccessTokenUri(oAuthTokenUrl);
-        //resource.setUserAuthorizationUri(oAuthAuthorizeUrl);
-        resource.setClientId("admin_client");
-        resource.setClientSecret("admin_secret");
-        resource.setGrantType(GRANT_TYPE_CLIENT_CREDENTIALS);
-        resource.setScope(Arrays.asList(TRUST.getName()));
+        final OAuth2RestTemplate restTemplate = new OAuth2RestTemplate(details, new DefaultOAuth2ClientContext());
 
-        return resource ;
+        return restTemplate;
     }
 }

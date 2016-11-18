@@ -1,5 +1,6 @@
 package org.strokova.booker.api.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -21,6 +22,9 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
 
     private static final String GRANT_TYPE_CLIENT_CREDENTIALS = "client_credentials";
     private static final String RESOURCE_ID = "booker_api";
+
+    @Autowired
+    private TokenStore tokenStore;
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
@@ -46,11 +50,6 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        endpoints.tokenStore(tokenStore());
-    }
-
-    @Bean
-    public TokenStore tokenStore() {
-        return new InMemoryTokenStore();
+        endpoints.tokenStore(tokenStore);
     }
 }

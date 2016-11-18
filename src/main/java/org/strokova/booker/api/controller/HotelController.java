@@ -17,7 +17,7 @@ import static org.strokova.booker.api.queryParameters.HotelQueryParameters.*;
  */
 
 @RestController
-@RequestMapping("/hotels")
+@RequestMapping("/api/hotels")
 public class HotelController {
 
     private static final String DEFAULT_PAGE_SIZE = "25";
