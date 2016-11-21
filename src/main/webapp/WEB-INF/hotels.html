@@ -3,10 +3,31 @@
 
 <head>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
-    <p>Hello!</p>
+<div class="container-fluid bg-main">
+    <div class="row">
+        <table class="table table-striped">
+            <tr>
+                <th>Hotel name</th>
+                <th>Pool</th>
+                <th>Waterpark</th>
+                <th>Tennis Court</th>
+            </tr>
+            <div th:each="hotel : ${hotels}">
+                <tr>
+                    <td th:text="${hotel.name}"></td>
+                    <td><i th:class="${hotel.hasPool}? 'fa fa-check-square-o' : 'fa fa-minus'" aria-hidden="true"></i></td>
+                    <td><i th:class="${hotel.hasWaterpark}? 'fa fa-check-square-o' : 'fa fa-minus'" aria-hidden="true"></i></td>
+                    <td><i th:class="${hotel.hasTennisCourt}? 'fa fa-check-square-o' : 'fa fa-minus'" aria-hidden="true"></i></td>
+                </tr>
+            </div>
+        </table>
+    </div>
+</div>
+
 </body>
 
 </html>

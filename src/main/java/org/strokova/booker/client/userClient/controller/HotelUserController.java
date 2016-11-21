@@ -9,10 +9,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.OAuth2RestOperations;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.strokova.booker.client.jacksonUtils.JacksonPageImpl;
 import org.strokova.booker.common.model.Hotel;
@@ -31,6 +33,7 @@ import static org.strokova.booker.common.queryParameters.HotelQueryParameters.HO
 @EnableOAuth2Client
 public class HotelUserController {
 
+    private static final String PAGE_HOTELS = "hotels";
     private static final String DEFAULT_PAGE_SIZE = "25";
     private static final String DEFAULT_PAGE_NUMBER = "0";
     private static final String DEFAULT_SORT_ORDER = "ASC";
@@ -54,7 +57,8 @@ public class HotelUserController {
             @RequestParam(value = HOTEL_QUERY_PARAM_NAME, required = false) String name,
             @RequestParam(value = HOTEL_QUERY_PARAM_HAS_POOL, required = false) Boolean hasPool,
             @RequestParam(value = HOTEL_QUERY_PARAM_HAS_WATERPARK, required = false) Boolean hasWaterpark,
-            @RequestParam(value = HOTEL_QUERY_PARAM_HAS_TENNIS_COURT, required = false) Boolean hasTennisCourt
+            @RequestParam(value = HOTEL_QUERY_PARAM_HAS_TENNIS_COURT, required = false) Boolean hasTennisCourt,
+            Model model
     ) {
         System.out.println(restTemplate.getAccessToken()); // TODO: remove - never print sensitive data :)
 
@@ -62,25 +66,34 @@ public class HotelUserController {
                 .queryParam("page", page)
                 .queryParam("size", size)
                 .queryParam("order", order)
-                .queryParam("by", by)
-                .queryParam(HOTEL_QUERY_PARAM_NAME, name)
-                .queryParam(HOTEL_QUERY_PARAM_HAS_POOL, hasPool)
-                .queryParam(HOTEL_QUERY_PARAM_HAS_WATERPARK, hasWaterpark)
-                .queryParam(HOTEL_QUERY_PARAM_HAS_TENNIS_COURT, hasTennisCourt);
+                .queryParam("by", by);
+        if (name != null) { // TODO: more elegant way to do this?
+            uriBuilder.queryParam(HOTEL_QUERY_PARAM_NAME, name);
+        }
+        if (hasPool != null) {
+            uriBuilder.queryParam(HOTEL_QUERY_PARAM_HAS_POOL, hasPool);
+        }
+        if (hasWaterpark != null) {
+            uriBuilder.queryParam(HOTEL_QUERY_PARAM_HAS_WATERPARK, hasWaterpark);
+        }
+        if (hasTennisCourt != null) {
+            uriBuilder.queryParam(HOTEL_QUERY_PARAM_HAS_TENNIS_COURT, hasTennisCourt);
+        }
 
+        System.out.println(uriBuilder.build().encode().toUri());
 
         ResponseEntity<JacksonPageImpl<Hotel>> responseEntity = restTemplate.exchange(
                 uriBuilder.build().encode().toUri(),
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<JacksonPageImpl<Hotel>>() {});
+                new ParameterizedTypeReference<JacksonPageImpl<Hotel>>() {
+                });
 
-        JacksonPageImpl<Hotel> responseBody = responseEntity.getBody();
-        List<Hotel> hotels = responseBody.getContent();
-        Iterator<Sort.Order> sortIterator = responseBody.getSort().iterator();
+        List<Hotel> hotels = responseEntity.getBody().getContent();
 
-        //throw new NotImplementedException();
-        return "hotels";
+        model.addAttribute("hotels", hotels);
+
+        return PAGE_HOTELS;
     }
 
     @RequestMapping(value = "/{hotelId}", method = RequestMethod.GET)
