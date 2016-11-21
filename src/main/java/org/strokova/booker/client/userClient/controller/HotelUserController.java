@@ -60,8 +60,6 @@ public class HotelUserController {
             @RequestParam(value = HOTEL_QUERY_PARAM_HAS_TENNIS_COURT, required = false) Boolean hasTennisCourt,
             Model model
     ) {
-        System.out.println(restTemplate.getAccessToken()); // TODO: remove - never print sensitive data :)
-
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(baseUrl + "/api/hotels")
                 .queryParam("page", page)
                 .queryParam("size", size)
