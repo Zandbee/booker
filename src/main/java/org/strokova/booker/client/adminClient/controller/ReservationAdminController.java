@@ -1,4 +1,4 @@
-package org.strokova.booker.client.admin.controller;
+package org.strokova.booker.client.adminClient.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.UriComponentsBuilder;
-import org.strokova.booker.model.GuestReservation;
-import org.strokova.booker.model.Reservation;
+import org.strokova.booker.common.model.GuestReservation;
+import org.strokova.booker.common.model.Reservation;
 
 /**
  * 17.11.2016.
  */
 @Controller
-@RequestMapping("/admin/reservations")
+@RequestMapping("/adminClient/reservations")
 public class ReservationAdminController {
 
     @Value("${oauth.resource}")
@@ -41,7 +41,7 @@ public class ReservationAdminController {
             @RequestParam("hotelId") Integer hotelId,
             @RequestParam("roomId") Long roomId) {
         UriComponentsBuilder uriBuilder =
-                UriComponentsBuilder.fromHttpUrl(baseUrl + "/admin")
+                UriComponentsBuilder.fromHttpUrl(baseUrl + "/adminClient")
                         .pathSegment("hotels", hotelId.toString(), "rooms", roomId.toString(), "reservations");
         ResponseEntity<Reservation> response = restTemplate.postForEntity(
                 uriBuilder.build().encode().toUri(),

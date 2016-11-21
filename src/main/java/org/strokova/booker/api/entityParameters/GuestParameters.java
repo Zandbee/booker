@@ -1,16 +1,14 @@
-package org.strokova.booker.api.queryParameters;
+package org.strokova.booker.api.entityParameters;
 
-import static org.strokova.booker.api.queryParameters.ReservationQueryParameters.*;
+import static org.strokova.booker.common.queryParameters.GuestQueryParameters.*;
 
 /**
- * 03.11.2016.
+ * 02.11.2016.
  */
-public enum ReservationParameter {
-    ID("id", RESERVATION_QUERY_PARAM_ID),
-    DATE_FROM("dateFrom", RESERVATION_QUERY_PARAM_DATE_FROM),
-    DATE_TO("dateTo", RESERVATION_QUERY_PARAM_DATE_TO),
-    ROOM("room", RESERVATION_QUERY_PARAM_ROOM),
-    GUEST("guest", RESERVATION_QUERY_PARAM_GUEST);
+public enum GuestParameters {
+    ID("id", GUEST_QUERY_PARAM_ID),
+    NAME("name", GUEST_QUERY_PARAM_NAME),
+    PHONE("phone", GUEST_QUERY_PARAM_PHONE);
 
     // exact field name in class, corresponding to column in db
     private String columnName;
@@ -19,7 +17,7 @@ public enum ReservationParameter {
     private String queryParameterName;
 
     // private
-    ReservationParameter(String columnName, String sortColumn) {
+    GuestParameters(String columnName, String sortColumn) {
         this.columnName = columnName;
         this.queryParameterName = sortColumn;
     }

@@ -1,4 +1,4 @@
-package org.strokova.booker.client;
+package org.strokova.booker.client.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package org.strokova.booker.model;
+package org.strokova.booker.common.model;
 
 /**
  * 03.11.2016.

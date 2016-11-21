@@ -1,11 +1,11 @@
-package org.strokova.booker.api.queryParameters;
+package org.strokova.booker.api.entityParameters;
 
-import static org.strokova.booker.api.queryParameters.RoomQueryParameters.*;
+import static org.strokova.booker.common.queryParameters.RoomQueryParameters.*;
 
 /**
  * 02.11.2016.
  */
-public enum RoomParameter {
+public enum RoomParameters {
     ID("id", ROOM_QUERY_PARAM_ID),
     TYPE("type", ROOM_QUERY_PARAM_TYPE),
     HAS_TV("hasTv", ROOM_QUERY_PARAM_HAS_TV),
@@ -23,7 +23,7 @@ public enum RoomParameter {
     private String queryParameterName;
 
     // private
-    RoomParameter(String columnName, String sortColumn) {
+    RoomParameters(String columnName, String sortColumn) {
         this.columnName = columnName;
         this.queryParameterName = sortColumn;
     }

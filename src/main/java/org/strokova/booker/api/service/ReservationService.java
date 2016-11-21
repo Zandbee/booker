@@ -13,9 +13,9 @@ import org.strokova.booker.api.entity.GuestEntity;
 import org.strokova.booker.api.entity.ReservationEntity;
 import org.strokova.booker.api.entity.ReservationEntityFactory;
 import org.strokova.booker.api.entity.RoomEntity;
-import org.strokova.booker.model.GuestReservation;
-import org.strokova.booker.model.Reservation;
-import org.strokova.booker.api.queryParameters.ReservationParameter;
+import org.strokova.booker.common.model.GuestReservation;
+import org.strokova.booker.common.model.Reservation;
+import org.strokova.booker.api.entityParameters.ReservationParameters;
 import org.strokova.booker.api.repository.GuestRepository;
 import org.strokova.booker.api.repository.ReservationRepository;
 import org.strokova.booker.api.repository.RoomRepository;
@@ -228,14 +228,14 @@ public class ReservationService {
     private static String determineSortProperty(String by) {
         String sortProperty = null;
 
-        for (ReservationParameter param : ReservationParameter.values()) {
+        for (ReservationParameters param : ReservationParameters.values()) {
             if (by.equalsIgnoreCase(param.getQueryParameterName())) {
                 sortProperty = param.getColumnName();
             }
         }
         // if by param is invalid - order by room
         if (sortProperty == null) {
-            sortProperty = ReservationParameter.ROOM.getColumnName();
+            sortProperty = ReservationParameters.ROOM.getColumnName();
         }
 
         return sortProperty;

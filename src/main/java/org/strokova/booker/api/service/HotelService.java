@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.strokova.booker.api.entity.HotelEntity;
 import org.strokova.booker.api.entity.HotelEntityFactory;
-import org.strokova.booker.model.Hotel;
-import org.strokova.booker.api.queryParameters.HotelParameter;
+import org.strokova.booker.common.model.Hotel;
+import org.strokova.booker.api.entityParameters.HotelParameters;
 import org.strokova.booker.api.repository.HotelRepository;
 
 import static org.strokova.booker.api.searchPredicate.HotelSearchPredicates.*;
@@ -96,14 +96,14 @@ public class HotelService {
     private static String determineSortProperty(String by) {
         String sortProperty = null;
 
-        for (HotelParameter param : HotelParameter.values()) {
+        for (HotelParameters param : HotelParameters.values()) {
             if (by.equalsIgnoreCase(param.getQueryParameterName())) {
                 sortProperty = param.getColumnName();
             }
         }
         // if by param is invalid - order by name
         if (sortProperty == null) {
-            sortProperty = HotelParameter.NAME.getColumnName();
+            sortProperty = HotelParameters.NAME.getColumnName();
         }
 
         return sortProperty;

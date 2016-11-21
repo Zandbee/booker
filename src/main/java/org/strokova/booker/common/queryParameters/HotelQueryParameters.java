@@ -1,4 +1,4 @@
-package org.strokova.booker.api.queryParameters;
+package org.strokova.booker.common.queryParameters;
 
 public interface HotelQueryParameters {
     String HOTEL_QUERY_PARAM_ID = "id";

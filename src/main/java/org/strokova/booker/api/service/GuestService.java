@@ -8,11 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.strokova.booker.api.entity.GuestEntity;
 import org.strokova.booker.api.entity.GuestEntityFactory;
-import org.strokova.booker.model.Guest;
-import org.strokova.booker.api.queryParameters.GuestParameter;
+import org.strokova.booker.api.entityParameters.GuestParameters;
 import org.strokova.booker.api.repository.GuestRepository;
+import org.strokova.booker.common.model.Guest;
 
-import static org.strokova.booker.api.searchPredicate.GuestSearchPredicates.*;
+import static org.strokova.booker.api.searchPredicate.GuestSearchPredicates.nameIs;
+import static org.strokova.booker.api.searchPredicate.GuestSearchPredicates.phoneIs;
 import static org.strokova.booker.api.service.ServiceUtils.determineSortDirection;
 
 /**
@@ -86,14 +87,14 @@ public class GuestService {
     private static String determineSortProperty(String by) {
         String sortProperty = null;
 
-        for (GuestParameter param : GuestParameter.values()) {
+        for (GuestParameters param : GuestParameters.values()) {
             if (by.equalsIgnoreCase(param.getQueryParameterName())) {
                 sortProperty = param.getColumnName();
             }
         }
         // if by param is invalid - order by name
         if (sortProperty == null) {
-            sortProperty = GuestParameter.NAME.getColumnName();
+            sortProperty = GuestParameters.NAME.getColumnName();
         }
 
         return sortProperty;

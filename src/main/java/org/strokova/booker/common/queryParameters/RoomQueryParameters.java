@@ -1,4 +1,4 @@
-package org.strokova.booker.api.queryParameters;
+package org.strokova.booker.common.queryParameters;
 
 /**
  * 02.11.2016.

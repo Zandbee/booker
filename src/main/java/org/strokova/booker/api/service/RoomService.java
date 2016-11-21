@@ -9,9 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.strokova.booker.api.entity.HotelEntity;
 import org.strokova.booker.api.entity.RoomEntity;
 import org.strokova.booker.api.entity.RoomEntityFactory;
-import org.strokova.booker.model.Room;
-import org.strokova.booker.model.RoomType;
-import org.strokova.booker.api.queryParameters.RoomParameter;
+import org.strokova.booker.common.model.Room;
+import org.strokova.booker.common.model.RoomType;
+import org.strokova.booker.api.entityParameters.RoomParameters;
 import org.strokova.booker.api.repository.HotelRepository;
 import org.strokova.booker.api.repository.RoomRepository;
 
@@ -132,14 +132,14 @@ public class RoomService {
     private static String determineSortProperty(String by) {
         String sortProperty = null;
 
-        for (RoomParameter param : RoomParameter.values()) {
+        for (RoomParameters param : RoomParameters.values()) {
             if (by.equalsIgnoreCase(param.getQueryParameterName())) {
                 sortProperty = param.getColumnName();
             }
         }
         // if by param is invalid - order by type
         if (sortProperty == null) {
-            sortProperty = RoomParameter.TYPE.getColumnName();
+            sortProperty = RoomParameters.TYPE.getColumnName();
         }
 
         return sortProperty;

@@ -7,13 +7,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.strokova.booker.model.GuestReservation;
-import org.strokova.booker.model.Reservation;
+import org.strokova.booker.common.model.GuestReservation;
+import org.strokova.booker.common.model.Reservation;
 import org.strokova.booker.api.service.ReservationService;
 
 import java.util.Date;
 
-import static org.strokova.booker.api.queryParameters.ReservationQueryParameters.*;
+import static org.strokova.booker.common.queryParameters.ReservationQueryParameters.*;
 
 /**
  * 03.11.2016.

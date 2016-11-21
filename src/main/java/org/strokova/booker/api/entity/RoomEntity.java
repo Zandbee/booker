@@ -1,6 +1,6 @@
 package org.strokova.booker.api.entity;
 
-import org.strokova.booker.model.RoomType;
+import org.strokova.booker.common.model.RoomType;
 
 import javax.persistence.*;
 import java.util.HashSet;

@@ -1,4 +1,4 @@
-package org.strokova.booker.model;
+package org.strokova.booker.common.model;
 
 import org.strokova.booker.api.entity.RoomEntity;
 

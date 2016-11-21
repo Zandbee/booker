@@ -1,4 +1,4 @@
-package org.strokova.booker.client.admin;
+package org.strokova.booker.client.userClient;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -12,14 +12,14 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 
 import java.util.Arrays;
 
-import static org.strokova.booker.api.security.OAuthScopes.TRUST;
+import static org.strokova.booker.api.security.OAuthScopes.*;
 
 /**
  * 17.11.2016.
  */
 @Configuration
 @EnableOAuth2Client
-public class AdminOAuth2Client {
+public class UserOAuth2Client {
 
     private static final String GRANT_TYPE_CLIENT_CREDENTIALS = "client_credentials";
 
@@ -34,11 +34,11 @@ public class AdminOAuth2Client {
     private OAuth2ProtectedResourceDetails resourceDetails() {
         ClientCredentialsResourceDetails details = new ClientCredentialsResourceDetails();
 
-        details.setClientId("admin_client");
-        details.setClientSecret("admin_secret");
+        details.setClientId("user_client");
+        details.setClientSecret("user_secret");
         details.setAccessTokenUri(oAuthTokenUrl);
         details.setGrantType(GRANT_TYPE_CLIENT_CREDENTIALS);
-        details.setScope(Arrays.asList(TRUST.getName()));
+        details.setScope(Arrays.asList(READ.getName(), WRITE.getName()));
 
         return details;
     }

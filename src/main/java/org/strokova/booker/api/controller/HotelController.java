@@ -7,10 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.strokova.booker.model.Hotel;
+import org.strokova.booker.common.model.Hotel;
 import org.strokova.booker.api.service.HotelService;
 
-import static org.strokova.booker.api.queryParameters.HotelQueryParameters.*;
+import static org.strokova.booker.common.queryParameters.HotelQueryParameters.*;
 
 /**
  * 27.10.2016.

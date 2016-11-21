@@ -1,4 +1,4 @@
-package org.strokova.booker.client;
+package org.strokova.booker.client.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -6,7 +6,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 
 /**
@@ -14,22 +13,22 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationEn
  */
 @Configuration
 @EnableWebSecurity
-public class ClientSecurityConfig extends WebSecurityConfigurerAdapter {
+public class ConfigClientSecurity extends WebSecurityConfigurerAdapter {
 
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("admin").password("admin").roles("ADMIN");
+                .withUser("adminClient").password("adminClient").roles("ADMIN");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 //.requiresChannel().and() // TODO: test if this works fine
-                .antMatcher("/client").authorizeRequests().anyRequest().permitAll() // TODO: restrict!
+                .antMatcher("/client").authorizeRequests().anyRequest().permitAll()
                 .and()
-                .antMatcher("/admin/**").authorizeRequests().anyRequest().authenticated()
+                .antMatcher("/adminClient/**").authorizeRequests().anyRequest().authenticated()
                 .and()
                 .httpBasic()
                 .and()
@@ -39,7 +38,7 @@ public class ClientSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public BasicAuthenticationEntryPoint entryPoint() {
         BasicAuthenticationEntryPoint basicAuthEntryPoint = new BasicAuthenticationEntryPoint();
-        basicAuthEntryPoint.setRealmName("Booker_Admin");
+        basicAuthEntryPoint.setRealmName("Booker_Admin"); // TODO: need this?
         return basicAuthEntryPoint;
     }
 }

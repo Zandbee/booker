@@ -1,6 +1,6 @@
 package org.strokova.booker.api.entity;
 
-import org.strokova.booker.model.Room;
+import org.strokova.booker.common.model.Room;
 
 /**
  * author: Veronika, 10/30/2016.
