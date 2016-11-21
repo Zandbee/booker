@@ -34,7 +34,7 @@ import static org.strokova.booker.common.queryParameters.HotelQueryParameters.HO
 public class HotelUserController {
 
     private static final String PAGE_HOTELS = "hotels";
-    private static final String DEFAULT_PAGE_SIZE = "25";
+    private static final String DEFAULT_PAGE_SIZE = "5";
     private static final String DEFAULT_PAGE_NUMBER = "0";
     private static final String DEFAULT_SORT_ORDER = "ASC";
 
@@ -80,8 +80,6 @@ public class HotelUserController {
             uriBuilder.queryParam(HOTEL_QUERY_PARAM_HAS_TENNIS_COURT, hasTennisCourt);
         }
 
-        System.out.println(uriBuilder.build().encode().toUri());
-
         ResponseEntity<JacksonPageImpl<Hotel>> responseEntity = restTemplate.exchange(
                 uriBuilder.build().encode().toUri(),
                 HttpMethod.GET,
@@ -89,8 +87,10 @@ public class HotelUserController {
                 new ParameterizedTypeReference<JacksonPageImpl<Hotel>>() {
                 });
 
+        int totalPages = responseEntity.getBody().getTotalPages();
         List<Hotel> hotels = responseEntity.getBody().getContent();
 
+        model.addAttribute("totalPages", totalPages);
         model.addAttribute("hotels", hotels);
 
         return PAGE_HOTELS;

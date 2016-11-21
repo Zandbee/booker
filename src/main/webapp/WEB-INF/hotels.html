@@ -8,6 +8,7 @@
 
 <body>
 <div class="container-fluid bg-main">
+
     <div class="row">
         <table class="table table-striped">
             <tr>
@@ -26,6 +27,17 @@
             </div>
         </table>
     </div>
+
+    <div class="row">
+        <div th:unless="${totalPages < 2}">
+            <ul class="pagination" th:each="pageNum : ${#numbers.sequence(1, __${totalPages}__)}">
+                <li>
+                    <!--a th:href="@{/(page=__${pageNum}__,category=__${#httpServletRequest.getParameter('category')}__)}"
+                       th:text="${pageNum}"></a--></li>
+            </ul>
+        </div>
+    </div>
+
 </div>
 
 </body>
