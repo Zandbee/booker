@@ -9,6 +9,28 @@
 <body>
 <div class="container-fluid bg-main">
 
+    <form class="form-horizontal" th:action="@{${'~' + #httpServletRequest.requestURI}}" method="GET">
+        <div class="form-group">
+            <label>Hotel name</label>
+            <input type="text" name="name"/>
+        </div>
+        <div class="form-group">
+            <label>Pool</label>
+            <input type="checkbox" name="hasPool" />
+        </div>
+        <div class="form-group">
+            <label>Waterpark</label>
+            <input type="checkbox" name="hasWaterpark" />
+        </div>
+        <div class="form-group">
+            <label>Tennis Court</label>
+            <input type="checkbox" name="hasTennisCourt" />
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Search"/>
+        </div>
+    </form>
+
     <div class="row">
         <table class="table table-striped">
             <tr>
@@ -29,10 +51,6 @@
                 </tr>
             </div>
         </table>
-    </div>
-
-    <div class="row">
-        <p th:text="${param.size}" th:unless="${param.size == null}">Test</p>
     </div>
 
     <div class="row">

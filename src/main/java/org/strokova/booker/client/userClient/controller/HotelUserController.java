@@ -3,7 +3,6 @@ package org.strokova.booker.client.userClient.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.OAuth2RestOperations;
@@ -14,16 +13,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.strokova.booker.client.jacksonUtils.JacksonPageImpl;
 import org.strokova.booker.common.model.Hotel;
 
-import java.util.Iterator;
 import java.util.List;
 
 import static org.strokova.booker.common.queryParameters.HotelQueryParameters.*;
-import static org.strokova.booker.common.queryParameters.HotelQueryParameters.HOTEL_QUERY_PARAM_HAS_TENNIS_COURT;
 
 /**
  * 18.11.2016.
@@ -60,12 +56,17 @@ public class HotelUserController {
             @RequestParam(value = HOTEL_QUERY_PARAM_HAS_TENNIS_COURT, required = false) Boolean hasTennisCourt,
             Model model
     ) {
+        // 0-based pages
+        if (page > 0) {
+            page--;
+        }
+
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(baseUrl + "/api/hotels")
                 .queryParam("page", page)
                 .queryParam("size", size)
                 .queryParam("order", order)
                 .queryParam("by", by);
-        if (name != null) { // TODO: more elegant way to do this?
+        if (name != null && !name.isEmpty()) { // TODO: more elegant way to do this?
             uriBuilder.queryParam(HOTEL_QUERY_PARAM_NAME, name);
         }
         if (hasPool != null) {
