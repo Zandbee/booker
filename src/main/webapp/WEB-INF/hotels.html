@@ -20,19 +20,34 @@
             <div th:each="hotel : ${hotels}">
                 <tr>
                     <td th:text="${hotel.name}"></td>
-                    <td><i th:class="${hotel.hasPool}? 'fa fa-check-square-o' : 'fa fa-minus'" aria-hidden="true"></i></td>
-                    <td><i th:class="${hotel.hasWaterpark}? 'fa fa-check-square-o' : 'fa fa-minus'" aria-hidden="true"></i></td>
-                    <td><i th:class="${hotel.hasTennisCourt}? 'fa fa-check-square-o' : 'fa fa-minus'" aria-hidden="true"></i></td>
+                    <td><i th:class="${hotel.hasPool}? 'fa fa-check-square-o' : 'fa fa-minus'" aria-hidden="true"></i>
+                    </td>
+                    <td><i th:class="${hotel.hasWaterpark}? 'fa fa-check-square-o' : 'fa fa-minus'"
+                           aria-hidden="true"></i></td>
+                    <td><i th:class="${hotel.hasTennisCourt}? 'fa fa-check-square-o' : 'fa fa-minus'"
+                           aria-hidden="true"></i></td>
                 </tr>
             </div>
         </table>
     </div>
 
     <div class="row">
+        <p th:text="${param.size}" th:unless="${param.size == null}">Test</p>
+    </div>
+
+    <div class="row">
         <div th:unless="${totalPages < 2}">
             <ul class="pagination" th:each="pageNum : ${#numbers.sequence(1, __${totalPages}__)}">
                 <li>
-                    <a th:href="@{#httpServletRequest.requestURI/(page=__${pageNum}__)}"
+                    <a th:href="@{${'~' + #httpServletRequest.requestURI}
+                    (page=__${pageNum}__,
+                    size=${param.size},
+                    order=${param.order},
+                    by=${param.by},
+                    name=${param.name},
+                    hasPool=${param.hasPool},
+                    hasWaterpark=${param.hasWaterpark},
+                    hasTennisCourt=${param.hasTennisCourt})}"
                        th:text="${pageNum}"></a></li>
             </ul>
         </div>
